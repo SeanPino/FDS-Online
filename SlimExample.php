@@ -14,18 +14,18 @@ $app->get('/', function() use($app){
 // A different kind of page.
 $app->get('/pyro/', function() use($app){
 	echo "The Pyro project is really on fire!";
-}
+});
 
 // You can pass in variables. Specify them in the function().
 $app->get('/name/:name', function($name) use($app){
 	echo "Your name is $name";
-}
+});
 
 // You can pass in more than one variable, as many as needed.
 $app->get('/add/:a/:b', function($a, $b) use($app){
 	$ans = (int)$a + (int)$b;
 	echo "The answer is $ans";
-}
+});
 
 // This makes the code work.
 $app->run();
