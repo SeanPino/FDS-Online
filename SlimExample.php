@@ -45,5 +45,31 @@ $app->post('/favorite/', function() use($app){
 	echo "Your favorite color is: $color";
 });
 
+// An example for file uploading.
+$app->get('/upload/', function() use($app){
+	?>
+		<form name="upload-form" action="http://<?php echo PATH; ?>/SlimExample.php/upload/" method="post" enctype="multipart/form-data">
+			Enter a file to upload:
+			<input type="file" name="upload-file" />
+			<input type="submit" name="submit" value="submit" />
+		</form>
+	<?php
+});
+
+$app->post('/upload/', function() use($app){
+	$ext = pathinfo($_FILES["upload-file"]["name"], PATHINFO_EXTENSION);
+	if($_FILES["upload-file"]["type"] != "application/octet-stream" ||
+	   $ext != "fds"){
+		echo "You have uploaded an invalid file.";
+	}else{
+		echo "Your file is now being uploaded to the server.";
+		$target = "uploads/" . basename( $_FILES["upload-file"]["name"]);
+		if(move_uploaded_file($_FILES["upload-file"]["tmp_name"], $target)){
+			echo "The file " . basename($_FILES["upload-file"]["name"]) . " has been uploaded.";
+		}
+		// Upload to the database here.
+	}
+});
+
 // This makes the code work.
 $app->run();
