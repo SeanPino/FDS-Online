@@ -24,7 +24,8 @@
 						<form>
 							<fieldset>
 								<legend>FDS Upload</legend>
-								<input type="file" name="file" />
+								<input type="file" accept=".fds" name="file" />
+								<button class="tiny radius pyro-color" type="submit">Upload</button>
 							</fieldset>
 						</form>
 					</div>
