@@ -44,13 +44,10 @@
 							Versioning system:
 							First number is current sprint
 							Second number is day in sprint
-							Third number is person who modified:
-								1 is Alex Neises
-								2 is Sean Pino
-								3 is Shawn Contant
-							Ex. Version 4.7.3 would be sprint 4, 7th day of sprint, last edited by Shawn.
+							Third number is incremented with push number that day
+							Ex. Version 4.7.3 would be sprint 4, 7th day of sprint, 3rd update that day.
 						 -->
-						<p>Version 1.5.1</p>
+						<p>Version 1.6.1</p>
 					</div>
 				</div>
 			</div>
