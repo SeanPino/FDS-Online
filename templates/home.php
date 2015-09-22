@@ -29,6 +29,11 @@
 						</form>
 					</div>
 				</div>
+				<div class="row">
+					<div class="small-12 columns">
+
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -45,9 +50,15 @@
 							First number is current sprint
 							Second number is day in sprint
 							Third number is incremented with push number that day
-							Ex. Version 4.7.3 would be sprint 4, 7th day of sprint, 3rd update that day.
+							Ex. Version 4.7.3 would be Sprint 4, 7th day of Sprint, 3rd update that day.
 						 -->
 						<p>Version 1.6.1</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="small-12 columns">
+						<?php $status = $data['sprint']; ?>
+						<p>Day <?php print $status['day']; ?> of Sprint <?php print $status['sprint']; ?></p>
 					</div>
 				</div>
 			</div>

@@ -22,8 +22,22 @@ $app->container->singleton('twig', function ($c) {
     return $twig;
 });
 
+function sprint()
+{
+    $date1 = new DateTime('2015-09-02');
+    $date2 = new DateTime();
+    $interval = $date1->diff($date2);
+    $status = array();
+    $status['sprint'] = floor($interval->days / 14);
+    $status['day'] = $interval->days % 14;
+
+    return $status;
+}
+
 $app->get('/', function () use ($app) {
-    $app->render('home.php');
+    $app->render('home.php', array(
+        'sprint'    => sprint()
+    ));
 })->name('home');
 
 $app->get('/about', function () use ($app) {
