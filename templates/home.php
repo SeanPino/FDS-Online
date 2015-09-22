@@ -40,7 +40,17 @@
 				</div>
 				<div class="row">
 					<div class="small-12 columns">
-						<p>Version 0.1.0</p>
+						<!--	
+							Versioning system:
+							First number is current sprint
+							Second number is day in sprint
+							Third number is person who modified:
+								1 is Alex Neises
+								2 is Sean Pino
+								3 is Shawn Contant
+							Ex. Version 4.7.3 would be sprint 4, 7th day of sprint, last edited by Shawn.
+						 -->
+						<p>Version 1.5.1</p>
 					</div>
 				</div>
 			</div>
