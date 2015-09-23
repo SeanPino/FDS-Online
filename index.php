@@ -33,7 +33,7 @@ function sprint()
     $date2 = new DateTime();
     $interval = $date1->diff($date2);
     $status = array();
-    $status['sprint'] = floor($interval->days / 14);
+    $status['sprint'] = 1 + floor($interval->days / 14);
     $status['day'] = $interval->days % 14;
 
     return $status;
