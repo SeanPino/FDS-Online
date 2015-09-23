@@ -1,0 +1,39 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'composer.json' ]
+2 info using npm@2.12.1
+3 info using node@v0.12.7
+4 verbose node symlink /usr/local/bin/node
+5 verbose install initial load of /Users/alex/Pyro/package.json
+6 verbose readDependencies loading dependencies from /Users/alex/Pyro/package.json
+7 silly cache add args [ 'composer.json', null ]
+8 verbose cache add spec composer.json
+9 silly cache add parsed spec { raw: 'composer.json',
+9 silly cache add   scope: null,
+9 silly cache add   name: null,
+9 silly cache add   rawSpec: 'composer.json',
+9 silly cache add   spec: '/Users/alex/Pyro/composer.json',
+9 silly cache add   type: 'local' }
+10 silly addLocalTarball shasum (computed) 15821511cf19443b0fba9cf97c5b1058200368fb
+11 verbose addTmpTarball /Users/alex/Pyro/composer.json not in flight; adding
+12 verbose addTmpTarball validating metadata from /Users/alex/Pyro/composer.json
+13 verbose tar unpack /Users/alex/Pyro/composer.json
+14 verbose tar unpacking to /var/folders/rz/kjb4yc8d6rl_hrbsqqbxzphc0000gr/T/npm-3409-b8c9c24e/unpack-b04768b849c5
+15 silly gentlyRm /var/folders/rz/kjb4yc8d6rl_hrbsqqbxzphc0000gr/T/npm-3409-b8c9c24e/unpack-b04768b849c5 is being purged
+16 verbose gentlyRm don't care about contents; nuking /var/folders/rz/kjb4yc8d6rl_hrbsqqbxzphc0000gr/T/npm-3409-b8c9c24e/unpack-b04768b849c5
+17 silly gunzTarPerm modes [ '755', '644' ]
+18 error not a package /Users/alex/Pyro/composer.json
+19 error addLocal Could not install /Users/alex/Pyro/composer.json
+20 verbose stack Error: ENOENT, open '/var/folders/rz/kjb4yc8d6rl_hrbsqqbxzphc0000gr/T/npm-3409-b8c9c24e/unpack-b04768b849c5/package.json'
+20 verbose stack     at Error (native)
+21 verbose cwd /Users/alex/Pyro
+22 error Darwin 14.1.0
+23 error argv "node" "/usr/local/bin/npm" "install" "composer.json"
+24 error node v0.12.7
+25 error npm  v2.12.1
+26 error path /var/folders/rz/kjb4yc8d6rl_hrbsqqbxzphc0000gr/T/npm-3409-b8c9c24e/unpack-b04768b849c5/package.json
+27 error code ENOENT
+28 error errno -2
+29 error enoent ENOENT, open '/var/folders/rz/kjb4yc8d6rl_hrbsqqbxzphc0000gr/T/npm-3409-b8c9c24e/unpack-b04768b849c5/package.json'
+29 error enoent This is most likely not a problem with npm itself
+29 error enoent and is related to npm not being able to find a file.
+30 verbose exit [ -2, true ]
