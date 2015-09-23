@@ -1,21 +1,22 @@
 <?php
-require 'rb.php';
+
 
 class DB
 {
 
-	R::setup("mysql:host=localhost;dbname=test" );
 	
 	public function AddJob($filename)
 	{
 		$w = R::dispense( 'job' );
+		//var_dump($filename);
 		$w->name = $filename;
 		$t = time();
-		$timestamp = date(DATE_RSS,$t);
+		//$timestamp = date(DATE_RSS,$t);
 		$w->timestamp = $t;
 		$w->status = R::enum('status:Queued');
 		$id = R::store( $w );
-		return "Job #{$id} successfully added at {$timestamp}.\n";
+		$bean = R::load('job', $id);
+		print_r(json_decode($bean));
 	}
 	
 	//obselete method, but if we would rather send the file in first then use this
@@ -39,21 +40,34 @@ class DB
 		$jobs = R::find( 'job' );
 		if ( !count( $jobs ) )
 		{			
-			return( "The job table is empty!\n" );
+			print ( "The job table is empty!\n" );
 		}
-		foreach( $jobs as $j ) 
-		{
-			echo "* #{$j->id}: {$j->name} : {$j->timestamp} : {$j->status} : {$j->filename}\n";
-		}
+		$beans = R::exportAll( $jobs );
+		//foreach( $jobs as $j ) 
+		//{
+		print_r(json_encode($beans));
+			//echo "* #{$j->id}: {$j->name} : {$j->timestamp} : {$j->status} : {$j->filename}\n";
+		//}
   
 	}
 
+
+	public function FindJob($id)
+	{
+		$job = R::load('job',$id);
+		print_r(json_decode($job));
+	}
+
+	//look at this maybe return a json false
 	public function DeleteJob($id)
 	{
 		R::trash( 'job', $id );
-		return "Job has been deleted!\n" ;
+		//print_r(json_decode($result));
+		print "Job {$id} has been deleted!\n" ;
 	}
 	
+
+	//not worked on yet
 	public function UpdateStatus($id,$newStatus)
 	{
 		$job = R::findOne('job','id = ?',[$id]);
@@ -61,10 +75,6 @@ class DB
 		R::store($job);
 	}
 
-	public function FindJob($id)
-	{
-		$j = R::findOne('job','id = ?',[$id]);
-		return "* #{$j->id}: {$j->name} : {$j->timestamp} : {$j->status} : {$j->filename}\n";
-	}
+
 }
 ?>
