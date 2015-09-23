@@ -2,15 +2,15 @@
 	<head>
 		<title>PyroSim</title>
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="/foundation/bower_components/foundation/css/foundation.min.css?<?php print time(); ?>" />
-		<link rel="stylesheet" href="/foundation/stylesheets/app.css?<?php print time(); ?>" />
-		<script src="/foundation/bower_components/foundation/js/vendor/modernizr.js?<?php print time(); ?>"></script>
+		<link rel="stylesheet" href="/static/foundation/bower_components/foundation/css/foundation.min.css?<?php print time(); ?>" />
+		<link rel="stylesheet" href="/static/foundation/stylesheets/app.css?<?php print time(); ?>" />
+		<script src="/static/foundation/bower_components/foundation/js/vendor/modernizr.js?<?php print time(); ?>"></script>
 	</head>
 	<body>
 		<div class="row">
 			<div id="main" class="small-12 columns">
 				<div class="row">
-					<img src="/images/100px_PyroSim_Logo.png"/>
+					<img src="/static/images/100px_PyroSim_Logo.png"/>
 					<div class="small-12 columns">
 						<h1>Online Simulator</h1>
 					</div>
@@ -59,10 +59,10 @@
 			</div>
 		</div>
 
-		<script src="/foundation/bower_components/foundation/js/vendor/jquery.js"></script>
-		<script src="/foundation/bower_components/foundation/js/vendor/fastclick.js"></script>
+		<script src="/static/foundation/bower_components/foundation/js/vendor/jquery.js"></script>
+		<script src="/static/foundation/bower_components/foundation/js/vendor/fastclick.js"></script>
 
-		<script src="/foundation/bower_components/foundation/js/foundation.min.js"></script>
+		<script src="/static/foundation/bower_components/foundation/js/foundation.min.js"></script>
 
 		<script>
 			$(document).foundation();
