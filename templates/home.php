@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<title>PyroSim</title>
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="/foundation/bower_components/foundation/css/foundation.min.css?<?php print time(); ?>" />
 		<link rel="stylesheet" href="/foundation/stylesheets/app.css?<?php print time(); ?>" />
@@ -25,7 +26,7 @@
 							<fieldset>
 								<legend>FDS Upload</legend>
 								<input type="file" accept=".fds" name="file" />
-								<button class="tiny radius pyro-color" type="submit">Upload</button>
+								<button class="tiny pyro-color" type="submit">Upload</button>
 							</fieldset>
 						</form>
 					</div>
@@ -46,14 +47,7 @@
 				</div>
 				<div class="row">
 					<div class="small-12 columns">
-						<!--	
-							Versioning system:
-							First number is current sprint
-							Second number is day in sprint
-							Third number is incremented with push number that day
-							Ex. Version 4.7.3 would be Sprint 4, 7th day of Sprint, 3rd update that day.
-						 -->
-						<p>Version 1.6.1</p>
+						<p>Version <?php print $data['version']; ?></p>
 					</div>
 				</div>
 				<div class="row">

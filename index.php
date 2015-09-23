@@ -22,6 +22,11 @@ $app->container->singleton('twig', function ($c) {
     return $twig;
 });
 
+function version()
+{
+    return '0.1.0';
+}
+
 function sprint()
 {
     $date1 = new DateTime('2015-09-02');
@@ -36,7 +41,8 @@ function sprint()
 
 $app->get('/', function () use ($app) {
     $app->render('home.php', array(
-        'sprint'    => sprint()
+        'sprint'    => sprint(),
+        'version'   => version()
     ));
 })->name('home');
 
