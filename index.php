@@ -24,7 +24,7 @@ $app->container->singleton('twig', function ($c) {
 
 function version()
 {
-    return '0.2.0';
+    return '0.3.0';
 }
 
 function sprint()
