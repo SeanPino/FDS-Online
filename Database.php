@@ -1,10 +1,11 @@
 <?php
-
+require("rb.php");
+R::setup("mysql:host=localhost;dbname=test" );
 
 class DB
 {
-	
-	R::setup("mysql:host=localhost;dbname=test" );
+
+
 	public function AddJob($filename)
 	{
 		$w = R::dispense( 'job' );
