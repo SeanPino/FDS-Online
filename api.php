@@ -1,6 +1,9 @@
 <?php
 
 require("vendor/slim/slim/Slim.php");
+require("Database.php");
+$db = new DB;
+
 \Slim\Slim::registerAutoloader();
 define('PATH', $_SERVER['SERVER_NAME']);
 
@@ -8,13 +11,13 @@ $app = \Slim\Slim();
 
 // Returns the status of the current job.
 $app->get('/jobs/:id', function($id) use($app){
-
+	$db->FindJob($id);
 });
 
 // Show a list of running and completed tasks.
 $app->get('/list/', function() use($app){
 	// Grab the list of files.
-	
+	 $db->ListJobs();
 	// Display the list.
 });
 
@@ -36,6 +39,7 @@ $app->post('/jobs/', function() use($app){
 			echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.";
 		}
 		// Upload to the database here.
+		$db->AddJob($_FILES["file"]["name"]);
 	}
 });
 

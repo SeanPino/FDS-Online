@@ -3,8 +3,8 @@
 
 class DB
 {
-
 	
+	R::setup("mysql:host=localhost;dbname=test" );
 	public function AddJob($filename)
 	{
 		$w = R::dispense( 'job' );
