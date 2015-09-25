@@ -22,7 +22,7 @@
 				</div>
 				<div class="row">
 					<div class="small-12 columns">
-						<form action="api.php/jobs" method="post" enctype="multipart/form-data">
+						<form action="api.php/v1/jobs" method="post" enctype="multipart/form-data">
 							<fieldset>
 								<legend>FDS Upload</legend>
 								<input type="file" accept=".fds" name="file" />
