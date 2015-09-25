@@ -1,13 +1,13 @@
 <?php
 
-require("vendor/slim/slim/Slim.php");
+require("vendor/slim/slim/slim/Slim.php");
 require("Database.php");
 $db = new DB;
 
 \Slim\Slim::registerAutoloader();
 define('PATH', $_SERVER['SERVER_NAME']);
 
-$app = \Slim\Slim();
+$app = new \Slim\Slim();
 
 // Returns the status of the current job.
 $app->get('/jobs/:id', function($id) use($app){
