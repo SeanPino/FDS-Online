@@ -7,7 +7,7 @@ $db = new DB;
 \Slim\Slim::registerAutoloader();
 define('PATH', $_SERVER['SERVER_NAME']);
 
-$app = \Slim\Slim();
+$app = new \Slim\Slim();
 
 // Returns the status of the current job.
 $app->get('/jobs/:id', function($id) use($app){
@@ -39,7 +39,7 @@ $app->post('/jobs/', function() use($app){
 			echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.";
 		}
 		// Upload to the database here.
-		$db->AddJob($_FILES["file"]["name"]);
+		$db->AddJob(basename($_FILES["file"]["name"]);
 	}
 });
 
