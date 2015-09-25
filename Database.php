@@ -4,7 +4,6 @@ require("rb.php");
 R::setup("mysql:host=localhost;dbname=test" );
 class DB
 {
-
 	public function AddJob($filename)
 	{
 		$w = R::dispense( 'job' );
