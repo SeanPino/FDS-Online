@@ -4,7 +4,7 @@ require("rb.php");
 R::setup("mysql:host=localhost;dbname=test" );
 class DB
 {
-	public function AddJob($filename)
+	public static function AddJob($filename)
 	{
 		$w = R::dispense( 'job' );
 		//var_dump($filename);
@@ -34,7 +34,7 @@ class DB
 	*/
 	
 	
-	public function ListJobs()
+	public static function ListJobs()
 	{
 		$jobs = R::find( 'job' );
 		if ( !count( $jobs ) )
@@ -51,14 +51,14 @@ class DB
 	}
 
 
-	public function FindJob($id)
+	public static function FindJob($id)
 	{
 		$job = R::load('job',$id);
 		print_r(json_decode($job));
 	}
 
 	//look at this maybe return a json false
-	public function DeleteJob($id)
+	public static function DeleteJob($id)
 	{
 		R::trash( 'job', $id );
 		//print_r(json_decode($result));
@@ -67,7 +67,7 @@ class DB
 	
 
 	//not worked on yet
-	public function UpdateStatus($id,$newStatus)
+	public static function UpdateStatus($id,$newStatus)
 	{
 		$job = R::findOne('job','id = ?',[$id]);
 		$job->status = $newStatus;
