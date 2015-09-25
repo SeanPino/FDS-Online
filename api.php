@@ -1,33 +1,34 @@
 <?php
 
+
 require("vendor/slim/slim/slim/Slim.php");
 require("Database.php");
 $db = new DB;
-
 \Slim\Slim::registerAutoloader();
 define('PATH', $_SERVER['SERVER_NAME']);
 
 $app = new \Slim\Slim();
 
 // Returns the status of the current job.
-$app->get('/jobs/:id', function($id) use($app){
-	$db->FindJob($id);
+$app->get('/api/v1/jobs/:id', function($id) use($app){
+
 });
 
 // Show a list of running and completed tasks.
-$app->get('/list/', function() use($app){
+$app->get('/api/v1/list/', function() use($app){
 	// Grab the list of files.
-	 $db->ListJobs();
+	print 'hi';
 	// Display the list.
 });
 
 // Download the finished project.
-$app->get('/download/:id', function($id) use($app){
+$app->get('/api/v1/download/:id', function($id) use($app){
+	print $id;
 	// Retrieve the file and start the download.
 });
 
 // Upload the file to the server and return the job ID.
-$app->post('/jobs/', function() use($app){
+$app->post('/api/v1/jobs/', function() use($app){
 	$ext = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
 	if($_FILES["file"]["type"] != "application/octet-stream" ||
 	   $ext != "fds"){
@@ -39,7 +40,6 @@ $app->post('/jobs/', function() use($app){
 			echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.";
 		}
 		// Upload to the database here.
-		$db->AddJob($_FILES["file"]["name"]);
 	}
 });
 
