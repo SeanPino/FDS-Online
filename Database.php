@@ -1,11 +1,10 @@
 <?php
 
-define('PATH', $_SERVER['SERVER_NAME']);
-require(PATH . "/pyro/vendor/redbean/rb.php");
-	R::setup("mysql:host=localhost;dbname=test" );
+require("rb.php");
+R::setup("mysql:host=localhost;dbname=test" );
+
 class DB
 {
-
 	public function AddJob($filename)
 	{
 		$w = R::dispense( 'job' );

@@ -41,7 +41,7 @@ $app->post('/api/v1/jobs/', function() use($app){
 		}
 		// Upload to the database here.
 
-		$db->AddJob(basename($_FILES["file"]["name"]);
+		$db->AddJob(basename($_FILES["file"]["name"]));
 	}
 });
 
