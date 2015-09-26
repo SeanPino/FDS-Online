@@ -34,13 +34,14 @@ $app->post('/api/v1/jobs/', function() use($app){
 	   $ext != "fds"){
 		echo "You have uploaded an invalid file.";
 	}else{
-		echo "Your file is now being uploaded to the server.";
 		$target = "uploads/" . basename( $_FILES["file"]["name"]);
 		if(move_uploaded_file($_FILES["file"]["tmp_name"], $target)){
-			echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.";
+			echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.<br />";
+		}else{
+			echo "There was an error trying to upload the file. Please try again.";
 		}
+		
 		// Upload to the database here.
-
 		DB::AddJob(basename($_FILES["file"]["name"]));
 	}
 });
