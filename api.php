@@ -34,6 +34,9 @@ $app->post('/api/v1/jobs/', function() use($app){
 	   $ext != "fds"){
 		echo "You have uploaded an invalid file.";
 	}else{
+	
+		// Add unique timestamp to name of file.
+		$_FILES["file"]["name"] = basename($_FILES["file"]["name"], ".fds") . "_" . time() . ".fds";
 		$target = "uploads/" . basename( $_FILES["file"]["name"]);
 		if(move_uploaded_file($_FILES["file"]["tmp_name"], $target)){
 			echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.<br />";
