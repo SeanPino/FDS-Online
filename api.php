@@ -39,16 +39,16 @@ $app->post('/api/v1/jobs/', function() use($app){
 		    mkdir('uploads', 0777, true);
 		}
 		// Add unique timestamp to name of file.
+		$original = basename($_FILES["file"]["name"]);
 		$_FILES["file"]["name"] = basename($_FILES["file"]["name"], ".fds") . "_" . time() . ".fds";
 		$target = "uploads/" . basename( $_FILES["file"]["name"]);
 		if(move_uploaded_file($_FILES["file"]["tmp_name"], $target)){
-			echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.<br />";
+			// Upload to the database here.
+			echo DB::AddJob(basename($_FILES["file"]["name"]));
+			// echo json_encode(array("message" => "The file " . $original . " has been uploaded."));
 		}else{
 			echo "There was an error trying to upload the file. Please try again.";
 		}
-		
-		// Upload to the database here.
-		DB::AddJob(basename($_FILES["file"]["name"]));
 	}
 });
 

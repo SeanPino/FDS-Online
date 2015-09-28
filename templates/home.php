@@ -22,11 +22,11 @@
 				</div>
 				<div class="row">
 					<div class="small-12 columns">
-						<form action="api/v1/jobs" method="post" enctype="multipart/form-data">
+						<form>
 							<fieldset>
 								<legend>FDS Upload</legend>
-								<input type="file" accept=".fds" name="file" />
-								<button class="tiny pyro-color" type="submit">Upload</button>
+								<input id="file" type="file" accept=".fds" name="file" />
+								<button id="upload_file" type="submit" class="tiny pyro-color">Upload</button>
 							</fieldset>
 						</form>
 					</div>
@@ -67,5 +67,7 @@
 		<script>
 			$(document).foundation();
 		</script>
+
+		<script src="/static/js/core.js?<?php print time(); ?>"></script>
 	</body>
 </html>
