@@ -15,7 +15,8 @@ class DB
 		$w->status = R::enum('status:Queued');
 		$id = R::store( $w );
 		$bean = R::load('job', $id);
-		print_r(json_decode($bean));
+		http_response_code(200);
+		return json_encode($bean);
 	}
 	
 	//obselete method, but if we would rather send the file in first then use this
