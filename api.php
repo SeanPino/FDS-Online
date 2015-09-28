@@ -36,6 +36,10 @@ $app->post('/api/v1/jobs/', function() use($app){
 	}else{
 	
 		// Add unique timestamp to name of file.
+		if (!file_exists('uploads')) {
+		    mkdir('uploads', 0777, true);
+		}
+
 		$_FILES["file"]["name"] = basename($_FILES["file"]["name"], ".fds") . "_" . time() . ".fds";
 		$target = "uploads/" . basename( $_FILES["file"]["name"]);
 		if(move_uploaded_file($_FILES["file"]["tmp_name"], $target)){
