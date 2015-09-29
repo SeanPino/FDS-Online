@@ -32,7 +32,7 @@ $app->post('/api/v1/jobs/', function() use($app){
 	$ext = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
 	if($_FILES["file"]["type"] != "application/octet-stream" ||
 	   $ext != "fds"){
-		echo "You have uploaded an invalid file.";
+		echo "You have uploaded an invalid file.\n";
 	}else{
 	
 		if (!file_exists('uploads')) {

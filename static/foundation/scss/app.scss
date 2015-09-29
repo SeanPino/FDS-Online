@@ -40,6 +40,19 @@
 //   "foundation/components/visibility";
 
 $fire : #990000;
+$new_primary : #446CB3;
+
+.alert-box {
+	padding: 1.3rem;
+	border-width: 0 0 0 0.35rem;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1rem;
+
+	&.primary {
+		border-left-color: $new_primary;
+		background-color: scale-color($new_primary, $lightness: 40%);
+	}
+}
 
 body {
 	.pyro-color {

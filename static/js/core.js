@@ -23,7 +23,10 @@ $(document).ready(function () {
 			contentType: false,
 			success: function (data, status, object) {
 				if(object.status === 200) {
-					console.log(data);
+					$('#success_alert').show();
+					$('#success_message').text('Your file, ' + data.filename + ', has been uploaded!');
+					var control = $('#file');
+					control.replaceWith(control = control.clone(true));
 				}
 				// Hide loading spinner
 			},

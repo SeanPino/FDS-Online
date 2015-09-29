@@ -9439,34 +9439,47 @@ th.hide-for-touch {
     display: none !important;
   }
 }
-/* line 44, ../scss/app.scss */
+/* line 45, ../scss/app.scss */
+.alert-box {
+  padding: 1.3rem;
+  border-width: 0 0 0 0.35rem;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+}
+/* line 51, ../scss/app.scss */
+.alert-box.primary {
+  border-left-color: #446CB3;
+  background-color: #8da6d4;
+}
+
+/* line 57, ../scss/app.scss */
 body {
   background-color: #ffdaa6;
 }
-/* line 45, ../scss/app.scss */
+/* line 58, ../scss/app.scss */
 body .pyro-color {
   background-color: #990000;
 }
-/* line 48, ../scss/app.scss */
+/* line 61, ../scss/app.scss */
 body h1 {
   font-family: 'Segoe UI', 'Open Sans', sans-serif;
   font-size: 3vw;
 }
-/* line 56, ../scss/app.scss */
+/* line 69, ../scss/app.scss */
 body p {
   font-family: 'Segoe UI', 'Open Sans', sans-serif;
 }
-/* line 59, ../scss/app.scss */
+/* line 72, ../scss/app.scss */
 body .center {
   text-align: center;
 }
-/* line 64, ../scss/app.scss */
+/* line 77, ../scss/app.scss */
 body .row #footer {
   color: #FFFFFF;
   background-color: #990000;
   box-shadow: rgba(0, 0, 0, 0.25) 2px 2px 4px;
 }
-/* line 69, ../scss/app.scss */
+/* line 82, ../scss/app.scss */
 body .row #main {
   min-height: 75%;
   background-color: #FFFFFF;

@@ -21,6 +21,14 @@
 					</div>
 				</div>
 				<div class="row">
+					<div class="small-8 small-offset-2 columns">
+						<div id="success_alert" style="display: none" data-alert class="alert-box primary">
+							<label id="success_message"></label>
+							<a href="#" class="close">&times;</a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
 					<div class="small-12 columns">
 						<form>
 							<fieldset>
@@ -29,11 +37,6 @@
 								<button id="upload_file" type="submit" class="tiny pyro-color">Upload</button>
 							</fieldset>
 						</form>
-					</div>
-				</div>
-				<div class="row">
-					<div class="small-12 columns">
-
 					</div>
 				</div>
 			</div>

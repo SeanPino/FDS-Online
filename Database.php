@@ -1,7 +1,7 @@
 <?php
 
 require("rb.php");
-R::setup("mysql:host=localhost;dbname=test" );
+R::setup("sqlite:db/database.db");
 class DB
 {
 	public static function AddJob($filename)
@@ -15,9 +15,9 @@ class DB
 		$w->status = R::enum('status:Queued');
 		$id = R::store( $w );
 		$bean = R::load('job', $id);
-		$bean->status_message = 'test';
+		$bean->filename = substr($filename, 0, strrpos($filename, '_')) . '.fds';
 		http_response_code(200);
-		return $bean;
+		print $bean;
 	}
 	
 	//obselete method, but if we would rather send the file in first then use this
@@ -46,7 +46,7 @@ class DB
 		$beans = R::exportAll( $jobs );
 		//foreach( $jobs as $j ) 
 		//{
-		print_r(json_encode($beans));
+		print_r($beans);
 			//echo "* #{$j->id}: {$j->name} : {$j->timestamp} : {$j->status} : {$j->filename}\n";
 		//}
   
