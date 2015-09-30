@@ -34,7 +34,7 @@ function sprint()
     $interval = $date1->diff($date2);
     $status = array();
     $status['sprint'] = 1 + floor($interval->days / 14);
-    $status['day'] = $interval->days % 14;
+    $status['day'] = ($interval->days % 14) + 1;
 
     return $status;
 }
