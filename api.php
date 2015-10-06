@@ -35,9 +35,11 @@ $app->post('/api/v1/jobs/', function() use($app){
 		echo "You have uploaded an invalid file.\n";
 	}else{
 	
+		// Add unique timestamp to name of file.
 		if (!file_exists('uploads')) {
 		    mkdir('uploads', 0777, true);
 		}
+
 		// Add unique timestamp to name of file.
 		$original = basename($_FILES["file"]["name"]);
 		$_FILES["file"]["name"] = basename($_FILES["file"]["name"], ".fds") . "_" . time() . ".fds";
