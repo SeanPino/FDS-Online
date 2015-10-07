@@ -34,22 +34,19 @@ $app->post('/api/v1/jobs/', function() use($app){
 	   $ext != "fds"){
 		echo "You have uploaded an invalid file.\n";
 	}else{
-	
-		// Add unique timestamp to name of file.
+		// Make sure the uploads file exists.
 		if (!file_exists('uploads')) {
 		    mkdir('uploads', 0777, true);
 		}
-
-		// Add unique timestamp to name of file.
-		$original = basename($_FILES["file"]["name"]);
-		$_FILES["file"]["name"] = basename($_FILES["file"]["name"], ".fds") . "_" . time() . ".fds";
-		$target = "uploads/" . basename( $_FILES["file"]["name"]);
-		if(move_uploaded_file($_FILES["file"]["tmp_name"], $target)){
-			// Upload to the database here.
-			echo DB::AddJob(basename($_FILES["file"]["name"]));
-			// echo json_encode(array("message" => "The file " . $original . " has been uploaded."));
+		
+		// Create the folder for the simulation and put it in there.
+		$target = "uploads/" . time();
+		mkdir($target);
+		if( move_uploaded_file($_FILES["file"]["tmp_name"], $target . "/" . basename($_FILES["file"]["name"])) ){
+			echo DB::AddJob($_FILES["file"]["name"]);
+			//echo json_encode(array("message" => "The file " . $_FILES["file"]["name"] . " has been uploaded."));
 		}else{
-			echo "There was an error trying to upload the file. Please try again.";
+		   return FALSE;
 		}
 	}
 });
