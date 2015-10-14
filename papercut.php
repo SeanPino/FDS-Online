@@ -25,11 +25,11 @@ class pc
 		if($firstTime <= 0 || $firstTime == null || $lastTime == null)
 		{
 			$error = "Divided by zero";
-			return $error;
+			return json_encode($error);
 			//return json_encode($error);
 		}
 		$percentage = ($lastTime/$firstTime) * 100 ;
-		return round($percentage, 2) . "%\n";
+		return json_encode(round($percentage, 2) . "%");
 
 	}
 
@@ -71,8 +71,9 @@ class pc
 		$newStartPos = $startpos;
 		$newEndPos =$endpos;
 
-		while($line == -1 || $newEndPos <=10 || $newStartPos >= $lineCount )
+		while($line == -1 )
 		{
+			//echo  $newStartPos. "-" . $newEndPos . "    ";
 			for($i = $newStartPos; $i < $newEndPos; $i++)
 			{
 				if(strpos($file[$i], $searchString) != false)
@@ -92,6 +93,11 @@ class pc
 			{
 				$newStartPos = $newStartPos - 10;
 				$newEndPos = $newStartPos + 10;
+			}
+
+			if($newStartPos <= 0 || $newStartPos > $lineCount)
+			{
+				break;
 			}
 		}
 		return $line;
