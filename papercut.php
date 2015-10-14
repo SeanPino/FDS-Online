@@ -121,7 +121,6 @@ class pc
 					break;
 				}
 			}
-
 			$lineNum++;
 		}
 
