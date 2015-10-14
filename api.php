@@ -18,8 +18,8 @@ $app->get('/api/v1/list/', function() use($app){
 	// Grab the list of files.
 	//$db->ListJobs();
 	$result = DB::ListJobs();
-        var_dump($result);
-        return $result;
+        //var_dump($result);
+        return json_decode($result);
 	// Display the list.
 });
 

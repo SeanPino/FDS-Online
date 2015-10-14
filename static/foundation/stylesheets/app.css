@@ -9485,3 +9485,13 @@ body .row #main {
   background-color: #FFFFFF;
   box-shadow: rgba(0, 0, 0, 0.25) 2px 2px 4px;
 }
+
+.sim-list {
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#refresh {
+    display: block;
+    margin: 0 auto;
+}

@@ -50,7 +50,8 @@ class DB
 			//echo "* #{$j->id}: {$j->name} : {$j->timestamp} : {$j->status} : {$j->filename}\n";
 		//}
 		http_response_code(200);
-		return json_encode($beans);
+		//return json_encode($beans);
+                echo json_encode($beans);
   
 	}
 

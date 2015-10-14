@@ -21,6 +21,9 @@
 					</div>
 				</div>
 				<div class="row">
+					<input type="button" id="refresh" value="Refresh List" />
+				</div>                            
+				<div class="row">
 					<div class="small-8 small-offset-2 columns">
 						<div id="success_alert" style="display: none" data-alert class="alert-box primary">
 							<label id="success_message"></label>
@@ -33,9 +36,6 @@
 					Now Loading Results.
 					</div>
 				</div>
-				<div class="row">
-					<input type="button" id="refresh" value="Refresh List" />
-				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -47,13 +47,13 @@
 				</div>
 				<div class="row">
 					<div class="small-12 columns">
-						<p>Version <?php //print $data['version']; ?></p>
+						<p>Version <?php print $data['version']; ?></p>
 					</div>
 				</div>
 				<div class="row">
 					<div class="small-12 columns">
-						<?php //$status = $data['sprint']; ?>
-						<p>Day <?php //print $status['day']; ?> of Sprint <?php //print $status['sprint']; ?></p>
+						<?php $status = $data['sprint']; ?>
+						<p>Day <?php print $status['day']; ?> of Sprint <?php print $status['sprint']; ?></p>
 					</div>
 				</div>
 			</div>
@@ -81,11 +81,28 @@
 					processData: false,
 					contentType: false,
 					success: function (object) {
-                                            console.log("Success is mine!!");
-                                            console.log("The object: " + object);
-//                                            result = jQuery.parseJSON(object);
-//                                            console.log(result);
-                                            $("#results").html(object);
+                                            result = jQuery.parseJSON(object);
+                                            console.log(result);
+                                            output = "<table class='sim-list'><tr><th>ID</th><th>Name</th><th>Status</th><th>Percent Complete</th></tr>";
+                                            for(x=0; x<result.length; x++){
+                                                switch(parseInt(result[x]["status_id"])){
+                                                    case 1:
+                                                        status = "In Queue";
+                                                        break;
+                                                    case 2:
+                                                        status = "Processing";
+                                                        break;
+                                                    case 3:
+                                                        status = "Completed";
+                                                        break;
+                                                    default:
+                                                        status = "Error";
+                                                }
+                                                percent = "Not started";
+                                                output += ("<tr><td>" + result[x]["id"] + "</td><td>" + result[x]["name"] + "</td><td>" + status + "</td><td>" + percent + "</td></tr>");
+                                            }
+                                            output += "</table>";
+                                            $("#results").html(output);
 					},
 					error: function (object, status, error) {
                                                 console.log("The response text: " + object.responseText);
