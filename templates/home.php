@@ -30,7 +30,7 @@
 				</div>
 				<div class="row">
 					<div class="small-12 columns">
-						<form>
+						<form action="/api/v1/jobs" method="post" enctype="application/octet-stream">
 							<fieldset>
 								<legend>FDS Upload</legend>
 								<input id="file" type="file" accept=".fds" name="file" />

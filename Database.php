@@ -46,7 +46,9 @@ class DB
 		$beans = R::exportAll( $jobs );
 		//foreach( $jobs as $j ) 
 		//{
-		print_r($beans);
+                //http_response_code(200);
+		return json_encode($beans);
+                
 			//echo "* #{$j->id}: {$j->name} : {$j->timestamp} : {$j->status} : {$j->filename}\n";
 		//}
   

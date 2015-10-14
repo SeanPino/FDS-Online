@@ -1,2 +1,4 @@
 /uploads/*
 *.scssc
+/nbproject/private
+db/database.php

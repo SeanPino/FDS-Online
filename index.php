@@ -50,6 +50,10 @@ $app->get('/about', function () use ($app) {
     $app->twig->display('about.php');
 })->name('about');
 
+$app->get('/list', function() use ($app){
+    $app->twig->display('list.php');
+})->name('list');
+
 $app->run();
 
 ?>

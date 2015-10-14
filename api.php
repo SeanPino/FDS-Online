@@ -17,7 +17,9 @@ $app->get('/api/v1/jobs/:id', function($id) use($app){
 $app->get('/api/v1/list/', function() use($app){
 	// Grab the list of files.
 	//$db->ListJobs();
-	DB::ListJobs();
+	$result = DB::ListJobs();
+        var_dump($result);
+        return $result;
 	// Display the list.
 });
 
