@@ -1,5 +1,5 @@
 <?php
-
+require("Database.php");
 class pc
 {
 
@@ -11,10 +11,8 @@ class pc
 	}
 
 
-	public static function getTime($filename)
+	public static function getTime($filename, $id)
 	{
-
-
 		$file = pc::createTempFile($filename);
 		$lineCount = count($file);
 		$firstTime = pc::searchLine($file,$lineCount,'F');
@@ -29,6 +27,7 @@ class pc
 			//return json_encode($error);
 		}
 		$percentage = ($lastTime/$firstTime) * 100 ;
+		DB::UpdateStatus($id, round($percentage, 2) );
 		return json_encode(round($percentage, 2) . "%");
 
 	}

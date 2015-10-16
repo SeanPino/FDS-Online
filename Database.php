@@ -1,7 +1,8 @@
 <?php
 
 require("rb.php");
-R::setup("sqlite:db/database.db");
+require("papercut.php");
+R::setup('mysql:host=localhost;dbname=test');
 class DB
 {
 	public static function AddJob($filename)
@@ -43,7 +44,11 @@ class DB
 		{			
 			print ( "The job table is empty!\n" );
 		}
+
 		$beans = R::exportAll( $jobs );
+		foreach ($beans as $bean) {
+			pc::getTime(substr($bean['filename'], 0, strrpos($bean['filename'], '_')) . ".out", $bean['id']);
+		}
 		http_response_code(200);
 		return json_encode($beans);
 
@@ -67,13 +72,33 @@ class DB
 	
 
 	//not worked on yet
-	public static function UpdateStatus($id,$newStatus)
+	public static function UpdateStatus($id,$percentage)
 	{
 		$job = R::findOne('job','id = ?',[$id]);
-		$job->status = $newStatus;
+		//$job = R::load('job', $id);
+		if($percentage == 100)
+		{
+			$job->status = R::enum('status:Completed');
+		}
+		else if ($percentage < 100 && $percentage > 0)
+		{
+			$job->status = R::enum('status:In Progress');
+		}
+		$job->progress = $percentage;
 		R::store($job);
 	}
 
+	//debug function
+	public static function MakeJob($percentage)
+	{
+		$w = R::dispense( 'job' );
+		$w->name = $filename;
+		$t = time();
+		$w->timestamp = $t;
+		$w->percentage = $percentage;
+		$w->status = R::enum('status:Queued');
+		$id = R::store( $w );
+	}
 
 }
 ?>
