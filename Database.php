@@ -21,22 +21,6 @@ class DB
 		print $bean;
 	}
 	
-	//obselete method, but if we would rather send the file in first then use this
-	/*
-	public function AddJob($file)
-	{
-		$w = R::dispense( 'job' );
-		$w->name = $file->getClientOriginalName();
-		$t = time();
-		$timestamp = date(DATE_RSS,$t);
-		$w->timestamp = $t;
-		$w->status = R::enum('status:Queued');
-		$id = R::store( $w );
-		return "Job #{$id} successfully added at {$timestamp}.\n";
-	}
-	*/
-	
-	
 	public static function ListJobs()
 	{
 		$jobs = R::find( 'job' );
