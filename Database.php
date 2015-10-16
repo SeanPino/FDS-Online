@@ -46,8 +46,19 @@ class DB
 		}
 
 		$beans = R::exportAll( $jobs );
-		foreach ($beans as $bean) {
-			pc::getTime(substr($bean['filename'], 0, strrpos($bean['filename'], '_')) . ".out", $bean['id']);
+		foreach ($beans as $bean) 
+		{
+			//var_dump($bean);
+			//json_encode($bean) . "\n";
+			$percentage = pc::getTime(substr($bean["fname"], 0, strrpos($bean["name"], '.')) . ".out", $bean["id"]);
+			if($percentage != null)
+			{
+				DB::UpdateStatus($id, round($percentage, 2));
+			}
+			else
+			{
+				echo $bean["name"] . " was not found\n";
+			}
 		}
 		http_response_code(200);
 		return json_encode($beans);

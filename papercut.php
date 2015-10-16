@@ -1,5 +1,4 @@
 <?php
-require("Database.php");
 class pc
 {
 
@@ -13,23 +12,28 @@ class pc
 
 	public static function getTime($filename, $id)
 	{
-		$file = pc::createTempFile($filename);
-		$lineCount = count($file);
-		$firstTime = pc::searchLine($file,$lineCount,'F');
-		$lastTime = pc::searchLine($file, $lineCount, 'B');
-		//var_dump($firstTime);
-		//var_dump($lastTime);
-
-		if($firstTime <= 0 || $firstTime == null || $lastTime == null)
+		if(file_exists($filename))
 		{
-			$error = "Divided by zero";
-			return json_encode($error);
-			//return json_encode($error);
-		}
-		$percentage = ($lastTime/$firstTime) * 100 ;
-		DB::UpdateStatus($id, round($percentage, 2) );
-		return json_encode(round($percentage, 2) . "%");
+			$file = pc::createTempFile($filename);
+			$lineCount = count($file);
+			$firstTime = pc::searchLine($file,$lineCount,'F');
+			$lastTime = pc::searchLine($file, $lineCount, 'B');
+			//var_dump($firstTime);
+			//var_dump($lastTime);
 
+			if($firstTime <= 0 || $firstTime == null || $lastTime == null)
+			{
+				$error = "Divided by zero";
+				return json_encode($error);
+				//return json_encode($error);
+			}
+			$percentage = ($lastTime/$firstTime) * 100 ;
+			return round($percentage, 2);
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	public static function searchLine($file, $lineCount, $direction)
