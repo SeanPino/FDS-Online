@@ -41,7 +41,8 @@ class DB
 		$jobs = R::find( 'job' );
 		if ( !count( $jobs ) )
 		{			
-			print ( "The job table is empty!\n" );
+			//print ( "The job table is empty!\n" );
+                        return FALSE;
 		}
 		$beans = R::exportAll( $jobs );
 		//foreach( $jobs as $j ) 
@@ -60,6 +61,7 @@ class DB
 	{
 		$job = R::load('job',$id);
 		print_r(json_decode($job));
+                return $job;    // Added by Shawn C. 
 	}
 
 	//look at this maybe return a json false

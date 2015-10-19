@@ -40,6 +40,11 @@ $app->post('/api/v1/jobs/', function() use($app){
 		if (!file_exists('uploads')) {
 		    mkdir('uploads', 0777, true);
 		}
+                
+                // Make sure the completed file exists.
+                if (!file_exists('completed')) {
+                    mkdir('completed', 0777, true);
+                }
 		
 		// Create the folder for the simulation and put it in there.
 		$target = "uploads/" . time();
@@ -53,5 +58,34 @@ $app->post('/api/v1/jobs/', function() use($app){
 	}
 });
 
+// Deletes a job from the database and filesystem.
+$app->get('/api/v1/delete/:id', function($id) use($app){
+    // Get a reference to the job.
+    $job = DB::FindJob($id);
+
+    if(file_exists("uploads" . $job["timestamp"])){
+        removeDirectory("uploads" . $job["timestamp"]);
+    }
+    if(file_exists("completed" . $job["timestamp"])){
+        removeDirectory("completed" . $job["timestamp"]);
+    }
+    
+    // Remove from the database.
+    DB::DeleteJob($id);
+});
+
 // Run the code.
 $app->run();
+
+// Maybe this doesn't go here.
+function removeDirectory($f){
+    foreach(glob("{$f}/*") as $file){
+        var_dump($file);
+        if(is_dir($file)) { 
+            removeDirectory($file);
+        }else{
+            unlink($file);
+        }
+    }
+    rmdir($f);    
+}

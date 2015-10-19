@@ -81,27 +81,30 @@
 					processData: false,
 					contentType: false,
 					success: function (object) {
-                                            result = jQuery.parseJSON(object);
-                                            console.log(result);
-                                            output = "<table class='sim-list'><tr><th>ID</th><th>Name</th><th>Status</th><th>Percent Complete</th></tr>";
-                                            for(x=0; x<result.length; x++){
-                                                switch(parseInt(result[x]["status_id"])){
-                                                    case 1:
-                                                        status = "In Queue";
-                                                        break;
-                                                    case 2:
-                                                        status = "Processing";
-                                                        break;
-                                                    case 3:
-                                                        status = "Completed";
-                                                        break;
-                                                    default:
-                                                        status = "Error";
+                                            if(!object){
+                                                output = "No jobs in storage.";
+                                            }else{
+                                                result = jQuery.parseJSON(object);
+                                                output = "<table class='sim-list'><tr><th>ID</th><th>Name</th><th>Status</th><th>Percent Complete</th></tr>";
+                                                for(x=0; x<result.length; x++){
+                                                    switch(parseInt(result[x]["status_id"])){
+                                                        case 1:
+                                                            status = "In Queue";
+                                                            break;
+                                                        case 2:
+                                                            status = "Processing";
+                                                            break;
+                                                        case 3:
+                                                            status = "Completed";
+                                                            break;
+                                                        default:
+                                                            status = "Error";
+                                                    }
+                                                    percent = "Not started";
+                                                    output += ("<tr><td>" + result[x]["id"] + "</td><td>" + result[x]["name"] + "</td><td>" + status + "</td><td>" + percent + "</td></tr>");
                                                 }
-                                                percent = "Not started";
-                                                output += ("<tr><td>" + result[x]["id"] + "</td><td>" + result[x]["name"] + "</td><td>" + status + "</td><td>" + percent + "</td></tr>");
+                                                output += "</table>";
                                             }
-                                            output += "</table>";
                                             $("#results").html(output);
 					},
 					error: function (object, status, error) {
