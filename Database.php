@@ -1,7 +1,8 @@
 <?php
 
 require("rb.php");
-R::setup("sqlite:db/database.db");
+require("papercut.php");
+R::setup('mysql:host=localhost;dbname=test');
 class DB
 {
 	public static function AddJob($filename)
@@ -13,28 +14,13 @@ class DB
 		//$timestamp = date(DATE_RSS,$t);
 		$w->timestamp = $t;
 		$w->status = R::enum('status:Queued');
+		$w->progress = 0;
 		$id = R::store( $w );
 		$bean = R::load('job', $id);
-		$bean->filename = substr($filename, 0, strrpos($filename, '_')) . '.fds';
+		$bean->filename =  $filename;
 		http_response_code(200);
 		print $bean;
 	}
-	
-	//obselete method, but if we would rather send the file in first then use this
-	/*
-	public function AddJob($file)
-	{
-		$w = R::dispense( 'job' );
-		$w->name = $file->getClientOriginalName();
-		$t = time();
-		$timestamp = date(DATE_RSS,$t);
-		$w->timestamp = $t;
-		$w->status = R::enum('status:Queued');
-		$id = R::store( $w );
-		return "Job #{$id} successfully added at {$timestamp}.\n";
-	}
-	*/
-	
 	
 	public static function ListJobs()
 	{
@@ -43,9 +29,26 @@ class DB
 		{			
 			print ( "The job table is empty!\n" );
 		}
+
 		$beans = R::exportAll( $jobs );
+		foreach ($beans as $bean) 
+		{
+			//var_dump($bean);
+			//json_encode($bean) . "\n";
+			$percentage = pc::getTime(substr($bean["fname"], 0, strrpos($bean["name"], '.')) . ".out", $bean["id"]);
+			if($percentage != null)
+			{
+				DB::UpdateStatus($id, round($percentage, 2));
+			}
+			else
+			{
+				//echo $bean["name"] . " was not found\n";
+				DB::UpdateStatus($id, 0);
+			}
+		}
 		http_response_code(200);
 		return json_encode($beans);
+
 
   
 	}
@@ -67,13 +70,33 @@ class DB
 	
 
 	//not worked on yet
-	public static function UpdateStatus($id,$newStatus)
+	public static function UpdateStatus($id,$percentage)
 	{
-		$job = R::findOne('job','id = ?',[$id]);
-		$job->status = $newStatus;
+		//$job = R::findOne('job','id = ?',[$id]);
+		$job = R::load('job', $id);
+		if($percentage == 100)
+		{
+			$job->status = R::enum('status:Completed');
+		}
+		else if ($percentage < 100 && $percentage > 0)
+		{
+			$job->status = R::enum('status:In Progress');
+		}
+		$job->progress = $percentage;
 		R::store($job);
 	}
 
+	//debug function
+	public static function MakeJob($filename)
+	{
+		$w = R::dispense( 'job' );
+		$w->name = $filename;
+		$t = time();
+		$w->timestamp = $t;
+		$w->progress = $percentage;
+		$w->status = R::enum('status:Queued');
+		$id = R::store( $w );
+	}
 
 }
 ?>
