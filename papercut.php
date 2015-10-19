@@ -12,9 +12,9 @@ class pc
 
 	public static function getTime($filename, $id)
 	{
-		if(file_exists($filename))
+		if(file_exists("uploads\\" . $filename))
 		{
-			$file = pc::createTempFile($filename);
+			$file = pc::createTempFile("uploads\\" .$filename);
 			$lineCount = count($file);
 			$firstTime = pc::searchLine($file,$lineCount,'F');
 			$lastTime = pc::searchLine($file, $lineCount, 'B');

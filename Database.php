@@ -14,9 +14,10 @@ class DB
 		//$timestamp = date(DATE_RSS,$t);
 		$w->timestamp = $t;
 		$w->status = R::enum('status:Queued');
+		$w->progress = 0;
 		$id = R::store( $w );
 		$bean = R::load('job', $id);
-		$bean->filename = substr($filename, 0, strrpos($filename, '_')) . '.fds';
+		$bean->filename =  $filename;
 		http_response_code(200);
 		print $bean;
 	}
@@ -41,11 +42,13 @@ class DB
 			}
 			else
 			{
-				echo $bean["name"] . " was not found\n";
+				//echo $bean["name"] . " was not found\n";
+				DB::UpdateStatus($id, 0);
 			}
 		}
 		http_response_code(200);
 		return json_encode($beans);
+
 
   
 	}
@@ -69,8 +72,8 @@ class DB
 	//not worked on yet
 	public static function UpdateStatus($id,$percentage)
 	{
-		$job = R::findOne('job','id = ?',[$id]);
-		//$job = R::load('job', $id);
+		//$job = R::findOne('job','id = ?',[$id]);
+		$job = R::load('job', $id);
 		if($percentage == 100)
 		{
 			$job->status = R::enum('status:Completed');
@@ -84,13 +87,13 @@ class DB
 	}
 
 	//debug function
-	public static function MakeJob($percentage)
+	public static function MakeJob($filename)
 	{
 		$w = R::dispense( 'job' );
 		$w->name = $filename;
 		$t = time();
 		$w->timestamp = $t;
-		$w->percentage = $percentage;
+		$w->progress = $percentage;
 		$w->status = R::enum('status:Queued');
 		$id = R::store( $w );
 	}
