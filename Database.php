@@ -35,22 +35,19 @@ class DB
 		{
 			//var_dump($bean);
 			//json_encode($bean) . "\n";
-			$percentage = pc::getTime(substr($bean["fname"], 0, strrpos($bean["name"], '.')) . ".out", $bean["id"]);
+			$percentage = pc::getTime(substr($bean["name"], 0, strrpos($bean["name"], '.')) . ".out", $bean["id"]);
 			if($percentage != null)
 			{
-				DB::UpdateStatus($id, round($percentage, 2));
+				DB::UpdateStatus($bean["id"], round($percentage, 2));
 			}
 			else
 			{
 				//echo $bean["name"] . " was not found\n";
-				DB::UpdateStatus($id, 0);
+				DB::UpdateStatus($bean["id"], 0);
 			}
 		}
 		http_response_code(200);
 		return json_encode($beans);
-
-
-  
 	}
 
 
@@ -72,7 +69,6 @@ class DB
 	//not worked on yet
 	public static function UpdateStatus($id,$percentage)
 	{
-		//$job = R::findOne('job','id = ?',[$id]);
 		$job = R::load('job', $id);
 		if($percentage == 100)
 		{
