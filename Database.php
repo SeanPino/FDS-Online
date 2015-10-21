@@ -47,7 +47,6 @@ class DB
 		return json_encode($beans);
 	}
 
-
 	public static function FindJob($id)
 	{
 		$job = R::load('job',$id);
@@ -56,7 +55,17 @@ class DB
 
 	public static function DeleteJob($id)
 	{
-		$result = R::trash( 'job', $id );
+		$job = R::load('job',$id);
+		$filename = $job['name'];
+		$timestamp = $job['timestamp'];
+		$bool = unlink("uploads\\" . $timestamp . "\\" . $filename);
+		if(!$bool)
+		{
+			$app->response()->status(400);
+			$error = "File {$filename} could not be deleted or was open.";
+			return json_encode($error);
+		}
+		$result = R::trash('job', $id);
 		if($result)
 		{
 			$app->response()->status(200);
@@ -71,8 +80,6 @@ class DB
 		}	
 	}
 	
-
-	//not worked on yet
 	public static function UpdateStatus($id,$percentage)
 	{
 		$job = R::load('job', $id);
