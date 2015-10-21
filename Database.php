@@ -58,7 +58,7 @@ class DB
 		$job = R::load('job',$id);
 		$filename = $job['name'];
 		$timestamp = $job['timestamp'];
-		$bool = DB::deleteDir("uploads\\" . $timestamp);
+		//$bool = DB::deleteDir("uploads\\" . $timestamp);
 		if(!$bool)
 		{
 			$app->response()->status(400);
@@ -80,6 +80,7 @@ class DB
 		}	
 	}
 
+	/*
 	public static function deleteDir($dirPath) 
 	{
 	    if (!is_dir($dirPath)) 
@@ -105,7 +106,7 @@ class DB
 	    }
 	    rmdir($dirPath);
 	    return true;
-	}
+	}*/
 	
 	public static function UpdateStatus($id,$percentage)
 	{
