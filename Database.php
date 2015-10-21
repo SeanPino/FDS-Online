@@ -58,7 +58,7 @@ class DB
 		$job = R::load('job',$id);
 		$filename = $job['name'];
 		$timestamp = $job['timestamp'];
-		$bool = unlink("uploads\\" . $timestamp . "\\" . $filename);
+		$bool = DB::deleteDir("uploads\\" . $timestamp);
 		if(!$bool)
 		{
 			$app->response()->status(400);
@@ -78,6 +78,33 @@ class DB
 			$error = "Job {$id} could not be deleted or doesn't exist.";
 			return json_encode($error);
 		}	
+	}
+
+	public static function deleteDir($dirPath) 
+	{
+	    if (!is_dir($dirPath)) 
+	    {
+	        //throw new InvalidArgumentException("$dirPath must be a directory");
+	        return false;
+	    }
+	    if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') 
+	    {
+	        $dirPath .= '/';
+	    }
+	    $files = glob($dirPath . '*', GLOB_MARK);
+	    foreach ($files as $file) 
+	    {
+	        if (is_dir($file)) 
+	        {
+	            self::deleteDir($file);
+	        } 
+	        else 
+	        {
+	            unlink($file);
+	        }
+	    }
+	    rmdir($dirPath);
+	    return true;
 	}
 	
 	public static function UpdateStatus($id,$percentage)
