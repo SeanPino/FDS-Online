@@ -62,16 +62,25 @@ $app->post('/api/v1/jobs/', function() use($app){
 $app->get('/api/v1/delete/:id', function($id) use($app){
     // Get a reference to the job.
     $job = DB::FindJob($id);
-
-    if(file_exists("uploads" . $job["timestamp"])){
-        removeDirectory("uploads" . $job["timestamp"]);
-    }
-    if(file_exists("completed" . $job["timestamp"])){
-        removeDirectory("completed" . $job["timestamp"]);
+    
+    // Delete the files in its containing folder.
+    $target = "uploads/" . $job["timestamp"];
+    var_dump($target);
+    $files = glob($target);
+    foreach($files as $f){
+        if(is_file($f)){
+            unlink($f);
+        }
     }
     
     // Remove from the database.
     DB::DeleteJob($id);
+});
+
+// Method for testing only - empty the Red Bean database.
+$app->get('/api/v1/wipe/', function() use($app){
+    R::wipe("job");
+    echo "The jobs have been wiped.";
 });
 
 // Run the code.
