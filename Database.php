@@ -2,7 +2,7 @@
 
 require("rb.php");
 require("papercut.php");
-R::setup('mysql:host=localhost;dbname=test');
+R::setup("sqlite:db/database.db");
 class DB
 {
 	public static function AddJob($filename)
@@ -44,40 +44,89 @@ class DB
 			}
 		}
 		$app->response()->status(200);
-		return json_encode($beans);
+		print_r(json_encode($beans));
 	}
 
-	public static function FindJob($id)
+	public static function FindJob($id, $app)
 	{
-		$job = R::load('job',$id);
-		print_r(json_decode($job));
+		$job = R::load('job', $id);
+		if(is_numeric($id))
+		{
+			if($job->id === 0)
+			{
+				$app->response->setStatus(400);
+				$error = array(
+					"response" => 400,
+					"message"  => "Invalid ID supplied."
+				);
+				print_r(json_encode($error));
+			}
+			else
+			{
+				$app->response->setStatus(200);
+				print $job;
+			}
+		}
+		else
+		{
+			$app->response->setStatus(400);
+			$error = array(
+				"response" => 400,
+				"message"  => "Invalid ID supplied."
+			);
+			print_r(json_encode($error));
+		}
 	}
 
-	public static function DeleteJob($id)
+	public static function DeleteJob($id, $app)
 	{
 		$job = R::load('job',$id);
 		$filename = $job['name'];
 		$timestamp = $job['timestamp'];
-		//$bool = DB::deleteDir("uploads\\" . $timestamp);
-		if(!$bool)
+		// $bool = DB::deleteDir("uploads\\" . $timestamp);
+		// if(!$bool)
+		// {
+		// 	$app->response()->setStatus(400);
+		// 	$error = "File {$filename} could not be deleted or was open.";
+		// 	print_r(json_encode($error));
+		// }
+		if(is_numeric($job->id))
 		{
-			$app->response()->status(400);
-			$error = "File {$filename} could not be deleted or was open.";
-			return json_encode($error);
-		}
-		$result = R::trash('job', $id);
-		if($result)
-		{
-			$app->response()->status(200);
-			$response = "Job {$id} has been deleted.";
-			return json_encode($response);
+			if($job->id === 0)
+			{
+				$result = 0;
+			}
+			else
+			{
+				$result = 1;
+			}
 		}
 		else
 		{
-			$app->response()->status(400);
+			$result = 0;
+		}
+		R::trash('job', $id);
+		if($result)
+		{
+			$app->response()->setStatus(200);
+			$response = "Job {$id} has been deleted.";
+			print_r(json_encode($response));
+		}
+		else
+		{
+			$app->response()->setStatus(400);
 			$error = "Job {$id} could not be deleted or doesn't exist.";
-			return json_encode($error);
+			print_r(json_encode($error));
 		}	
+	}
+
+	public static function Nuke($key, $env)
+	{
+		if($key === $env['key'])
+		{
+			R::nuke();
+			print '(JSON)We did it!';
+		}
 	}
 
 	/*

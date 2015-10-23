@@ -2,3 +2,4 @@
 *.scssc
 databaseTest.php
 papercutTest.php
+config.php
