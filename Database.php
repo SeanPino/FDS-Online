@@ -8,10 +8,8 @@ class DB
 	public static function AddJob($filename)
 	{
 		$w = R::dispense( 'job' );
-		//var_dump($filename);
 		$w->name = $filename;
 		$t = time();
-		//$timestamp = date(DATE_RSS,$t);
 		$w->timestamp = $t;
 		$w->status = R::enum('status:Queued');
 		$w->progress = 0;
@@ -22,19 +20,19 @@ class DB
 		print $bean;
 	}
 	
-	public static function ListJobs()
+	public static function ListJobs($app)
 	{
 		$jobs = R::find( 'job' );
 		if ( !count( $jobs ) )
 		{			
-			print ( "The job table is empty!\n" );
+			$app->response()->status(400);
+			$error = "No jobs in your table";
+			return json_encode($error);
 		}
 
 		$beans = R::exportAll( $jobs );
 		foreach ($beans as $bean) 
 		{
-			//var_dump($bean);
-			//json_encode($bean) . "\n";
 			$percentage = pc::getTime(substr($bean["name"], 0, strrpos($bean["name"], '.')) . ".out", $bean["id"]);
 			if($percentage != null)
 			{
@@ -42,14 +40,12 @@ class DB
 			}
 			else
 			{
-				//echo $bean["name"] . " was not found\n";
 				DB::UpdateStatus($bean["id"], 0);
 			}
 		}
-		http_response_code(200);
+		$app->response()->status(200);
 		return json_encode($beans);
 	}
-
 
 	public static function FindJob($id)
 	{
@@ -57,16 +53,61 @@ class DB
 		print_r(json_decode($job));
 	}
 
-	//look at this maybe return a json false
 	public static function DeleteJob($id)
 	{
-		R::trash( 'job', $id );
-		//print_r(json_decode($result));
-		print "Job {$id} has been deleted!\n" ;
+		$job = R::load('job',$id);
+		$filename = $job['name'];
+		$timestamp = $job['timestamp'];
+		//$bool = DB::deleteDir("uploads\\" . $timestamp);
+		if(!$bool)
+		{
+			$app->response()->status(400);
+			$error = "File {$filename} could not be deleted or was open.";
+			return json_encode($error);
+		}
+		$result = R::trash('job', $id);
+		if($result)
+		{
+			$app->response()->status(200);
+			$response = "Job {$id} has been deleted.";
+			return json_encode($response);
+		}
+		else
+		{
+			$app->response()->status(400);
+			$error = "Job {$id} could not be deleted or doesn't exist.";
+			return json_encode($error);
+		}	
 	}
-	
 
-	//not worked on yet
+	/*
+	public static function deleteDir($dirPath) 
+	{
+	    if (!is_dir($dirPath)) 
+	    {
+	        //throw new InvalidArgumentException("$dirPath must be a directory");
+	        return false;
+	    }
+	    if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') 
+	    {
+	        $dirPath .= '/';
+	    }
+	    $files = glob($dirPath . '*', GLOB_MARK);
+	    foreach ($files as $file) 
+	    {
+	        if (is_dir($file)) 
+	        {
+	            self::deleteDir($file);
+	        } 
+	        else 
+	        {
+	            unlink($file);
+	        }
+	    }
+	    rmdir($dirPath);
+	    return true;
+	}*/
+	
 	public static function UpdateStatus($id,$percentage)
 	{
 		$job = R::load('job', $id);
