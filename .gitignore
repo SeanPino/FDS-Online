@@ -2,3 +2,5 @@
 *.scssc
 /nbproject/private
 db/database.php
+databaseTest.php
+papercutTest.php

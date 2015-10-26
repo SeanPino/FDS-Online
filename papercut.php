@@ -1,5 +1,4 @@
 <?php
-
 class pc
 {
 
@@ -11,26 +10,27 @@ class pc
 	}
 
 
-	public static function getTime($filename)
+	public static function getTime($filename, $id)
 	{
-
-
-		$file = pc::createTempFile($filename);
-		$lineCount = count($file);
-		$firstTime = pc::searchLine($file,$lineCount,'F');
-		$lastTime = pc::searchLine($file, $lineCount, 'B');
-		//var_dump($firstTime);
-		//var_dump($lastTime);
-
-		if($firstTime <= 0 || $firstTime == null || $lastTime == null)
+		if(file_exists("uploads\\" . $filename))
 		{
-			$error = "Divided by zero";
-			return json_encode($error);
-			//return json_encode($error);
-		}
-		$percentage = ($lastTime/$firstTime) * 100 ;
-		return json_encode(round($percentage, 2) . "%");
+			$file = pc::createTempFile("uploads\\" .$filename);
+			$lineCount = count($file);
+			$firstTime = pc::searchLine($file,$lineCount,'F');
+			$lastTime = pc::searchLine($file, $lineCount, 'B');
 
+			if($firstTime <= 0 || $firstTime == null || $lastTime == null)
+			{
+				$error = "Divided by zero";
+				return json_encode($error);
+			}
+			$percentage = ($lastTime/$firstTime) * 100 ;
+			return round($percentage, 2);
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	public static function searchLine($file, $lineCount, $direction)
@@ -44,12 +44,11 @@ class pc
 		{
 			$lineNumber = pc::getLineNumber($file, "Total time:",$lineCount-10, $lineCount-1, $lineCount, $direction);
 		}
-		//var_dump($lineNumber);
+
 		if($lineNumber != null)
 		{
 			if($direction == 'F')
-			{
-				//var_dump($file[$lineNumber]);	
+			{	
 				$time = pc::getNumber($file[$lineNumber], 1);
 			}
 			else if($direction == 'B')
@@ -73,7 +72,6 @@ class pc
 
 		while($line == -1 )
 		{
-			//echo  $newStartPos. "-" . $newEndPos . "    ";
 			for($i = $newStartPos; $i < $newEndPos; $i++)
 			{
 				if(strpos($file[$i], $searchString) != false)
@@ -121,7 +119,6 @@ class pc
 					break;
 				}
 			}
-
 			$lineNum++;
 		}
 
