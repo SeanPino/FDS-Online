@@ -29,13 +29,14 @@ class DB
                         // return FALSE;
 			$app->response()->status(400);
 			$error = "No jobs in your table";
-			return json_encode($error);
+			print $error;
+			return;
 		}
 
 		$beans = R::exportAll( $jobs );
 		foreach ($beans as $bean) 
 		{
-			$percentage = pc::getTime(substr($bean["name"], 0, strrpos($bean["name"], '.')) . ".out", $bean["id"]);
+			$percentage = pc::getTime($bean["timestamp"] . '/' . substr($bean["name"], 0, strrpos($bean["name"], '.')) . ".out", $bean["id"]);
 			if($percentage != null)
 			{
 				DB::UpdateStatus($bean["id"], round($percentage, 2));
@@ -46,7 +47,7 @@ class DB
 			}
 		}
 		$app->response()->status(200);
-		return json_encode($beans);
+		print json_encode($beans);
 	}
 
 	public static function FindJob($id)

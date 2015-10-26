@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>PyroSim</title>
+		<input type="hidden" id="list_page" value="1"/>
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="static/foundation/bower_components/foundation/css/foundation.min.css?<?php print time(); ?>" />
 		<link rel="stylesheet" href="static/foundation/stylesheets/app.css?<?php print time(); ?>" />
@@ -29,7 +30,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div id="results">
+					<div class="small-12 columns" id="results">
 					Now Loading Results.
 					</div>
 				</div>

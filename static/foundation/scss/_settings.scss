@@ -121,7 +121,7 @@ $secondary-color: #E8490C;
 $alert-color: #FF001D;
 $success-color: #6318FF;
 $warning-color: #D30CE8;
-// $info-color: #a0d3e8;
+$info-color: #a0d3e8;
 
 // We use these to control various global styles
 // $body-bg: $white;
@@ -1078,10 +1078,10 @@ $warning-color: #D30CE8;
 // $progress-bar-margin-bottom: rem-calc(10);
 
 // We use these to set the meter colors
-// $progress-meter-color: $primary-color;
+$progress-meter-color: $primary-color;
 // $progress-meter-secondary-color: $secondary-color;
 // $progress-meter-success-color: $success-color;
-// $progress-meter-alert-color: $alert-color;
+$progress-meter-alert-color: $info-color;
 
 // 24. Range Slider
 // - - - - - - - - - - - - - - - - - - - - - - - - -
