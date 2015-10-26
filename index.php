@@ -46,12 +46,11 @@ $app->get('/', function () use ($app) {
     ));
 })->name('home');
 
-$app->get('/about', function () use ($app) {
-    $app->twig->display('about.php');
-})->name('about');
-
 $app->get('/list', function() use ($app){
-    $app->twig->display('list.php');
+    $app->render('list.php', array(
+        'sprint'    => sprint(),
+        'version'   => version()
+    ));
 })->name('list');
 
 $app->run();
