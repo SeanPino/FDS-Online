@@ -1,6 +1,6 @@
 /uploads/*
 *.scssc
 /nbproject/private
-db/database.db
+/db/*
 databaseTest.php
 papercutTest.php
