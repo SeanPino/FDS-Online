@@ -115,8 +115,9 @@ class DB
 	public static function UpdateStatus($id,$percentage)
 	{
 		$job = R::load('job', $id);
-		if($percentage == 100)
+		if($percentage >= 100)
 		{
+			$percentage = 100;
 			$job->status = R::enum('status:Completed');
 		}
 		else if ($percentage < 100 && $percentage > 0)
