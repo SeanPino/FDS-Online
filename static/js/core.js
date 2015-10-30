@@ -35,7 +35,7 @@ function getList(){
 					percent = parseFloat(result[x]["progress"]) + '%';
 					if(parseFloat(result[x]["progress"]) == 100)
 					{
-						output += ("<tr><td class='center'>" + result[x]["id"] + "</td><td class='center'>" + result[x]["name"] + "</td><td class='center'>" + status + "</td><td class='center'><div class='progress small-12 alert'><span class='meter' style='width: " + percent + "'>" + percent + "</span></div></td></tr>");
+						output += ("<tr><td class='center'>" + result[x]["id"] + "</td><td class='center'>" + result[x]["name"] + "</td><td class='center'>" + status + "</td><td class='center'><div class='progress small-12 alert'><span class='meter' style='width: " + percent + "'>" + percent + "</span></div><form action='/api/v1/download/" + result[x]["id"] + "' method='get'><input type='button' value='Download' /></form></td></tr>");
 					}
 					else
 					{
