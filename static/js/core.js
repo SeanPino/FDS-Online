@@ -5,7 +5,7 @@ function getList(){
 	console.log("Getting list");
 	$.ajax({
 		//url: 'api/v1/jobs',
-		url: '/api/v1/list/',
+		url: 'api/v1/list/',
 		type: 'GET',
 		//data: data,
 		cache: false,
