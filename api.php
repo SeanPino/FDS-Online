@@ -36,6 +36,7 @@ $app->get('/api/v1/jobs/:id', function($id) use($app){
  * @apiVersion 1.0.0
  * @apiExample {curl} Example usage:
  *     curl -X GET 'http://pyro.demo/api/v1/list/'
+ * @apiError (400 Bad Request) {Number} response 400
  */
 // Show a list of running and completed tasks.
 $app->get('/api/v1/list/', function() use($app){
@@ -45,17 +46,72 @@ $app->get('/api/v1/list/', function() use($app){
 	// Display the list.
 });
 
+/**
+ * @api {delete} /api/v1/delete/:id Delete a Job
+ * @apiDescription Deletes the specified job.
+ * @apiGroup Jobs
+ * @apiName DeleteJob
+ * @apiVersion 1.0.0
+ * @apiExample {curl}  Example usage:
+ *      curl 'http://pyro.demo/api/v1/delete/1'
+ */
 $app->delete('/api/v1/delete/:id', function($id) use($app){
 	DB::DeleteJob($id, $app);
 });
 
-// Download the finished project.
+/**
+ * @api {download} /api/v1/download/:id Download a finished job.
+ * @apiDescription Downloads a finished job.
+ * @apiGroup Jobs
+ * @apiName DownloadJob
+ * @apiVersion 1.0.0
+ * @apiExample {curl} Example usage:
+ *      curl 'http://pyro.demo/api/v1/download/1'
+ */
 $app->get('/api/v1/download/:id', function($id) use($app){
-	print $id;
-	// Retrieve the file and start the download.
+	//print $id;
+	
+        // Get the job to be downloaded.
+//        $job = DB::FindJob($id, $app);
+//        echo $id . "<br />";
+//        $job["timestamp"] = 1446044514;
+//        // Create the zip.
+//        $zip = new ZipArchive();
+//        echo "uploads/" . $job["timestamp"] . "/" . $job["timestamp"] . ".zip<br />";
+//        // Add everything except the original FDS file to the list of stuff to zip.
+//        $zip->open("uploads/" . $job["timestamp"] . "/" . $job["timestamp"] . ".zip", ZipArchive::CREATE);
+//        $files = scandir(".");
+//        foreach($files as $f){
+//            echo $f;
+//            if(substr($f, -4) !== ".fds"){  // Don't include the original FDS file.
+//                $zip->addFile($f);
+//            }
+//        }
+//        $zip->close();
+//        
+//        // Now make it available for download.
+//        return $zip;
+    chmod(".", 0777);
+    $zip = new ZipArchive();
+    $files = scandir(".");
+    $zip->open("zip.zip", ZipArchive::CREATE);
+    var_dump($zip);
+    foreach($files as $f){
+        $zip->addFile($f);
+    }
+    $res = $zip->close();
+    var_dump($res);
 });
 
-// Upload the file to the server and return the job ID.
+/**
+ * @api {jobs} /api/v1/download/jobs Upload job.
+ * @apiDescription Uploads a new job.
+ * @apiGroup Jobs
+ * @apiName UploadJob
+ * @apiVersion 1.0.0
+ * @apiExample {curl} Example usage:
+ *      curl -X -POST 'file=@C:/FDS/sim/example.fds' 'http://pyro.demo/api/v1/download/1'
+ */
 $app->post('/api/v1/jobs/', function() use($app){
 	$ext = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
 	if($_FILES["file"]["type"] != "application/octet-stream" ||
@@ -84,26 +140,15 @@ $app->post('/api/v1/jobs/', function() use($app){
 	}
 });
 
-// Deletes a job from the database and filesystem.
-$app->get('/api/v1/delete/:id', function($id) use($app){
-    // Get a reference to the job.
-    $job = DB::FindJob($id);
-    
-    // Delete the files in its containing folder.
-    $target = "uploads/" . $job["timestamp"];
-    var_dump($target);
-    $files = glob($target);
-    foreach($files as $f){
-        if(is_file($f)){
-            unlink($f);
-        }
-    }
-    
-    // Remove from the database.
-    DB::DeleteJob($id);
-});
-
-// Method for testing only - empty the Red Bean database.
+/**
+ * @api {wipe} /api/v1/wipe/ Erases all jobs.
+ * @apiDescription Erases all jobs (Testing purposes only).
+ * @apiGroup Jobs
+ * @apiName WipeJobs
+ * @apiVersion 1.0.0
+ * @apiExample {curl} Example usage:
+ *      curl 'http://pyro.demo/api/v1/wipe'
+ */
 $app->get('/api/v1/wipe/', function() use($app){
     R::wipe("job");
     echo "The jobs have been wiped.";
@@ -111,16 +156,3 @@ $app->get('/api/v1/wipe/', function() use($app){
 
 // Run the code.
 $app->run();
-
-// Maybe this doesn't go here.
-function removeDirectory($f){
-    foreach(glob("{$f}/*") as $file){
-        var_dump($file);
-        if(is_dir($file)) { 
-            removeDirectory($file);
-        }else{
-            unlink($file);
-        }
-    }
-    rmdir($f);    
-}
