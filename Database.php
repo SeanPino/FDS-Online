@@ -1,8 +1,9 @@
 <?php
-
 require("rb.php");
 require("papercut.php");
 R::setup("sqlite:db/database.db");
+define('threadCount', '3');
+
 class DB
 {
 	public static function AddJob($filename)
@@ -158,20 +159,19 @@ class DB
 		//check result for true return or false return
 
 		//find out how many are running currently
-		$count = R::exec('SELECT count(id), status FROM job WHERE job.status = 2');
-		print var_dump($count);
-
-		//if($count < 3)
-		//{
+		$inProgress = R::find( 'job', ' status_id = ? ', [ R::enum( 'status:In Progress' )->id ] );
+		$count = count($inProgress);
+		if($count < threadCount)
+		{
 			//query for next jobs
-			$jobs = R::exec('SELECT * FROM job WHERE job.status = 1');
-			print var_dump($jobs);
+			$jobs = R::find( 'job', ' status_id = ? ', [ R::enum( 'status:Queued' )->id ] );
 			//forech for each job queued and add them to an array of jobs and add 1 to count
 			foreach ($jobs as $job)
 			{
-				if($count < 3)
+				if($count < threadCount)
 				{
-					array_push($toRunJobs, $job);
+					$path = $job["timestamp"] . '/' . $job["name"];
+					array_push($toRunJobs, $path);
 					$count++;
 				}
 				else
@@ -180,11 +180,11 @@ class DB
 				}
 			}
 			return $toRunJobs;
-		//}
-		//else
-		//{
-		//	return null;
-		//}
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 }
