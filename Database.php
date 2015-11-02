@@ -22,32 +22,18 @@ class DB
 	
 	public static function ListJobs($app)
 	{
-		$jobs = R::find( 'job' );
-		if ( !count( $jobs ) )
-		{			
-			//print ( "The job table is empty!\n" );
-                        // return FALSE;
+		$bool = DB::refreshJobs();
+		if($bool[0])
+		{
+			$app->response()->status(200);
+			print json_encode($bool[1]);
+		}
+		else 
+		{
 			$app->response()->status(400);
 			$error = "No jobs in your table";
 			print $error;
-			return;
 		}
-
-		$beans = R::exportAll( $jobs );
-		foreach ($beans as $bean) 
-		{
-			$percentage = pc::getTime($bean["timestamp"] . '/' . substr($bean["name"], 0, strrpos($bean["name"], '.')) . ".out", $bean["id"]);
-			if($percentage != null)
-			{
-				DB::UpdateStatus($bean["id"], round($percentage, 2));
-			}
-			else
-			{
-				DB::UpdateStatus($bean["id"], 0);
-			}
-		}
-		$app->response()->status(200);
-		print json_encode($beans);
 	}
 
 	public static function FindJob($id)
@@ -138,6 +124,67 @@ class DB
 		$w->progress = $percentage;
 		$w->status = R::enum('status:Queued');
 		$id = R::store( $w );
+	}
+
+	public static function refreshJobs()
+	{
+		$jobs = R::find( 'job' );
+		if ( !count( $jobs ) )
+		{			
+			return array(false);
+		}
+
+		$beans = R::exportAll($jobs);
+		foreach ($beans as $bean) 
+		{
+			$percentage = pc::getTime($bean["timestamp"] . '/' . substr($bean["name"], 0, strrpos($bean["name"], '.')) . ".out", $bean["id"]);
+			if($percentage != null)
+			{
+				DB::UpdateStatus($bean["id"], round($percentage, 2));
+			}
+			else
+			{
+				DB::UpdateStatus($bean["id"], 0);
+			}
+		}
+		return array(true,$beans);
+	}
+
+	public static function queryFiles()
+	{
+		$toRunJobs = array();
+		//refresh jobs
+		$result = DB::refreshJobs();
+		//check result for true return or false return
+
+		//find out how many are running currently
+		$count = R::exec('SELECT count(id), status FROM job WHERE job.status = 2');
+		print var_dump($count);
+
+		//if($count < 3)
+		//{
+			//query for next jobs
+			$jobs = R::exec('SELECT * FROM job WHERE job.status = 1');
+			print var_dump($jobs);
+			//forech for each job queued and add them to an array of jobs and add 1 to count
+			foreach ($jobs as $job)
+			{
+				if($count < 3)
+				{
+					array_push($toRunJobs, $job);
+					$count++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			return $toRunJobs;
+		//}
+		//else
+		//{
+		//	return null;
+		//}
 	}
 
 }
