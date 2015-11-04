@@ -69,38 +69,32 @@ $app->delete('/api/v1/delete/:id', function($id) use($app){
  *      curl 'http://pyro.demo/api/v1/download/1'
  */
 $app->get('/api/v1/download/:id', function($id) use($app){
-	//print $id;
+	print $id;
 	
-        // Get the job to be downloaded.
-//        $job = DB::FindJob($id, $app);
-//        echo $id . "<br />";
-//        $job["timestamp"] = 1446044514;
-//        // Create the zip.
-//        $zip = new ZipArchive();
-//        echo "uploads/" . $job["timestamp"] . "/" . $job["timestamp"] . ".zip<br />";
-//        // Add everything except the original FDS file to the list of stuff to zip.
-//        $zip->open("uploads/" . $job["timestamp"] . "/" . $job["timestamp"] . ".zip", ZipArchive::CREATE);
-//        $files = scandir(".");
-//        foreach($files as $f){
-//            echo $f;
-//            if(substr($f, -4) !== ".fds"){  // Don't include the original FDS file.
-//                $zip->addFile($f);
-//            }
-//        }
-//        $zip->close();
-//        
-//        // Now make it available for download.
-//        return $zip;
-    chmod(".", 0777);
-    $zip = new ZipArchive();
-    $files = scandir(".");
-    $zip->open("zip.zip", ZipArchive::CREATE);
-    var_dump($zip);
-    foreach($files as $f){
-        $zip->addFile($f);
-    }
-    $res = $zip->close();
-    var_dump($res);
+        $job = DB::FindJob($id, $app);
+        //$timestamp = $job["timestamp"];
+        $timestamp = 1;
+        
+        // Make sure you can run the zip.
+        if(!is_writeable("uploads/$timestamp")){
+            die("Cannot write in the uploads directory directory.");
+        }
+        
+        $zip = new ZipArchive();
+        if($zip->open("uploads/$timestamp/$timestamp.zip", ZipArchive::CREATE) !== TRUE){
+            die("Unable to create zip file.");
+        }
+        
+        $files = scandir("uploads/$timestamp");
+        foreach($files as $f){
+            //if(file_exists($f) && is_readable($f) && is_file($f)){
+                $zip->addFile($f);
+            //}
+        }
+        $res = $zip->close();
+        var_dump($res);
+        var_dump($zip);
+        return $zip;
 });
 
 /**
