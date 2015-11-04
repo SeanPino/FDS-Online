@@ -104,13 +104,14 @@ $app->get('/api/v1/download/:id', function ($id) use ($app)
 	$zip = new ZipArchive();
 	$files = scandir(".");
 	$zip->open("zip.zip", ZipArchive::CREATE);
-	var_dump($zip);
+	// var_dump($zip);
 	foreach ($files as $f) 
 	{
 		$zip->addFile($f);
 	}
 	$res = $zip->close();
-	var_dump($res);
+	return $zip;
+	// var_dump($res);
 });
 
 /**

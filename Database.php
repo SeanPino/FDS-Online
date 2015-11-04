@@ -2,7 +2,8 @@
 require ("rb.php");
 require ("papercut.php");
 R::setup("sqlite:db/database.db");
-define('threadCount', '3');
+$ini = parse_ini_file('config.ini');
+define('threadCount', $ini['threadCount']);
 
 class DB
 {
