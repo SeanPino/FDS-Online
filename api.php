@@ -6,6 +6,54 @@ require("Database.php");
 \Slim\Slim::registerAutoloader();
 define('PATH', $_SERVER['SERVER_NAME']);
 
+function Zip($source, $destination)
+{
+	if(!extension_loaded('zip') || !file_exists($source))
+	{
+		return false;
+	}
+
+	$zip = new ZipArchive();
+	if(!$zip->open($destination, ZIPARCHIVE::CREATE))
+	{
+		return false;
+	}
+
+	$source = str_replace('\\', '/', realpath($source));
+
+	if(is_dir($source) === true)
+	{
+		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+		foreach($files as $file)
+		{
+			$file = str_replace('\\', '/', $file);
+
+			if(in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
+			{
+				continue;
+			}
+
+			$file = realpath($file);
+
+			if(is_dir($file) === true)
+			{
+				$zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+			}
+			elseif(is_file($file) === true)
+			{
+				$zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+			}
+		}
+	}
+	elseif(is_file($source) === true)
+	{
+		$zip->addFromString(basename($source), file_get_contents($source));
+	}
+
+	return $zip->close();
+}
+
 $app = new \Slim\Slim();
 /**
  * @api {get} /api/v1/jobs/:id Get Job Status
@@ -68,33 +116,42 @@ $app->delete('/api/v1/delete/:id', function($id) use($app){
  * @apiExample {curl} Example usage:
  *      curl 'http://pyro.demo/api/v1/download/1'
  */
-$app->get('/api/v1/download/:id', function($id) use($app){
-	print $id;
-	
-        $job = DB::FindJob($id, $app);
-        //$timestamp = $job["timestamp"];
-        $timestamp = 1;
-        
-        // Make sure you can run the zip.
-        if(!is_writeable("uploads/$timestamp")){
-            die("Cannot write in the uploads directory directory.");
-        }
-        
-        $zip = new ZipArchive();
-        if($zip->open("uploads/$timestamp/$timestamp.zip", ZipArchive::CREATE) !== TRUE){
-            die("Unable to create zip file.");
-        }
-        
-        $files = scandir("uploads/$timestamp");
-        foreach($files as $f){
-            //if(file_exists($f) && is_readable($f) && is_file($f)){
-                $zip->addFile($f);
-            //}
-        }
-        $res = $zip->close();
-        var_dump($res);
-        var_dump($zip);
-        return $zip;
+$app->get('/api/v1/download/:id', function($id)
+{
+	set_time_limit(0);
+	$job = DB::GetJob($id);
+	$timestamp = $job["timestamp"];
+	$name = preg_replace('/\\.[^.\\s]{3,4}$/', '', $job["name"]);
+
+	if(!is_writeable("uploads/" . $timestamp)){
+		die("Cannot write in the uploads directory.");
+	}
+	if(!file_exists('archives'))
+	{
+		mkdir('archives', 0777, true);
+	}
+	if(!file_exists('archives/' . $timestamp))
+	{
+		mkdir('archives/' . $timestamp, 0777, true);
+	}
+
+	Zip('uploads/' . $timestamp, 'archives/' . $timestamp . '/' . $name . '.zip');
+
+	$filename = $name . '.zip';
+	$filepath = 'archives/' . $timestamp . '/';
+
+	header("Pragma: public");
+	header("Expires: 0");
+	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+	header("Cache-Control: public");
+	header("Content-Description: File Transfer");
+	header("Content-type: application/octet-stream");
+	header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
+	header("Content-Transfer-Encoding: binary");
+	header("Content-Length: " . filesize($filepath . $filename));
+	ob_end_flush();
+	ob_end_clean();
+	@readfile($filepath . $filename);
 });
 
 /**

@@ -65,6 +65,16 @@ body {
 		font-size: 3vw;
 		// font-variant: small-caps;
 		// font-size: 5em;
+		&.header {
+			font-size: 5vw;
+			color: $fire;
+			font-weight: 700;
+			letter-spacing: -.5vw;
+			&img {
+				width: 10vw;
+				image-rendering: pixelated;
+			}
+		}
 	}
 	p {
 		font-family: 'Segoe UI', 'Open Sans', sans-serif;

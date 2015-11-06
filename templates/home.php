@@ -10,8 +10,8 @@
 		<div class="row">
 			<div id="main" class="small-12 columns">
 				<div class="row">
-					<img src="static/images/100px_PyroSim_Logo.png"/>
 					<div class="small-12 columns">
+						<h1 class="header">FDS Online</h1>
 						<h1>Online Simulator</h1>
 					</div>
 				</div>

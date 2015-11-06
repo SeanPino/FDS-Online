@@ -2,7 +2,7 @@
 	<head>
 		<title>PyroSim</title>
 		<input type="hidden" id="list_page" value="1"/>
-		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="static/foundation/bower_components/foundation/css/foundation.min.css?<?php print time(); ?>" />
 		<link rel="stylesheet" href="static/foundation/stylesheets/app.css?<?php print time(); ?>" />
 		<script src="static/foundation/bower_components/foundation/js/vendor/modernizr.js?<?php print time(); ?>"></script>
@@ -11,8 +11,8 @@
 		<div class="row">
 			<div id="main" class="small-12 columns">
 				<div class="row">
-					<img src="static/images/100px_PyroSim_Logo.png"/>
 					<div class="small-12 columns">
+						<h1 class="header">FDS Online</h1>
 						<h1>Online Simulator</h1>
 					</div>
 				</div>
@@ -31,7 +31,11 @@
 				</div>
 				<div class="row">
 					<div class="small-12 columns" id="results">
-					Now Loading Results.
+					</div>
+				</div>
+				<div id="loading-image" class="row">
+					<div class="small-12 columns">
+						<img style="display: block; margin: 0 auto;" src="static/images/482.gif"/>
 					</div>
 				</div>
 			</div>

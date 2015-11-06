@@ -54,7 +54,12 @@ class DB
 	{
 		$job = R::load('job',$id);
 		print_r(json_decode($job));
-                return $job;    // Added by Shawn C. 
+	}
+
+	public static function GetJob($id)
+	{
+		$job = R::load('job', $id);
+		return $job;
 	}
 
 	public static function DeleteJob($id)
