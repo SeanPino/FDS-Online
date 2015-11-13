@@ -6,54 +6,6 @@ require("Database.php");
 \Slim\Slim::registerAutoloader();
 define('PATH', $_SERVER['SERVER_NAME']);
 
-function Zip($source, $destination)
-{
-	if(!extension_loaded('zip') || !file_exists($source))
-	{
-		return false;
-	}
-
-	$zip = new ZipArchive();
-	if(!$zip->open($destination, ZIPARCHIVE::CREATE))
-	{
-		return false;
-	}
-
-	$source = str_replace('\\', '/', realpath($source));
-
-	if(is_dir($source) === true)
-	{
-		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
-
-		foreach($files as $file)
-		{
-			$file = str_replace('\\', '/', $file);
-
-			if(in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
-			{
-				continue;
-			}
-
-			$file = realpath($file);
-
-			if(is_dir($file) === true)
-			{
-				$zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
-			}
-			elseif(is_file($file) === true)
-			{
-				$zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
-			}
-		}
-	}
-	elseif(is_file($source) === true)
-	{
-		$zip->addFromString(basename($source), file_get_contents($source));
-	}
-
-	return $zip->close();
-}
-
 $app = new \Slim\Slim();
 /**
  * @api {get} /api/v1/jobs/:id Get Job Status
@@ -118,27 +70,13 @@ $app->delete('/api/v1/delete/:id', function($id) use($app){
  */
 $app->get('/api/v1/download/:id', function($id)
 {
-	set_time_limit(0);
 	$job = DB::GetJob($id);
+	
 	$timestamp = $job["timestamp"];
 	$name = preg_replace('/\\.[^.\\s]{3,4}$/', '', $job["name"]);
 
-	if(!is_writeable("uploads/" . $timestamp)){
-		die("Cannot write in the uploads directory.");
-	}
-	if(!file_exists('archives'))
-	{
-		mkdir('archives', 0777, true);
-	}
-	if(!file_exists('archives/' . $timestamp))
-	{
-		mkdir('archives/' . $timestamp, 0777, true);
-	}
-
-	Zip('uploads/' . $timestamp, 'archives/' . $timestamp . '/' . $name . '.zip');
-
-	$filename = $name . '.zip';
-	$filepath = 'archives/' . $timestamp . '/';
+	$global_filename = $name . '.zip';
+	$global_filepath = 'archives/' . $timestamp . '/';
 
 	header("Pragma: public");
 	header("Expires: 0");
@@ -146,12 +84,12 @@ $app->get('/api/v1/download/:id', function($id)
 	header("Cache-Control: public");
 	header("Content-Description: File Transfer");
 	header("Content-type: application/octet-stream");
-	header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
+	header("Content-Disposition: attachment; filename=\"" . $global_filename . "\"");
 	header("Content-Transfer-Encoding: binary");
-	header("Content-Length: " . filesize($filepath . $filename));
+	header("Content-Length: " . filesize($global_filepath . $global_filename));
 	ob_end_flush();
 	ob_end_clean();
-	@readfile($filepath . $filename);
+	@readfile($global_filepath . $global_filename);
 });
 
 /**

@@ -9465,33 +9465,33 @@ body h1 {
   font-family: 'Segoe UI', 'Open Sans', sans-serif;
   font-size: 3vw;
 }
-/* line 68, ../scss/app.scss */
-body h1.header {
+/* line 69, ../scss/app.scss */
+body h1.header a {
   font-size: 5vw;
   color: #990000;
   font-weight: 700;
   letter-spacing: -.5vw;
 }
-/* line 73, ../scss/app.scss */
-body h1.headerimg {
+/* line 74, ../scss/app.scss */
+body h1.header aimg {
   width: 10vw;
   image-rendering: pixelated;
 }
-/* line 79, ../scss/app.scss */
+/* line 81, ../scss/app.scss */
 body p {
   font-family: 'Segoe UI', 'Open Sans', sans-serif;
 }
-/* line 82, ../scss/app.scss */
+/* line 84, ../scss/app.scss */
 body .center {
   text-align: center;
 }
-/* line 87, ../scss/app.scss */
+/* line 89, ../scss/app.scss */
 body .row #footer {
   color: #FFFFFF;
   background-color: #990000;
   box-shadow: rgba(0, 0, 0, 0.25) 2px 2px 4px;
 }
-/* line 92, ../scss/app.scss */
+/* line 94, ../scss/app.scss */
 body .row #main {
   min-height: 75%;
   background-color: #FFFFFF;

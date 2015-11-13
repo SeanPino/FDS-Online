@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>PyroSim</title>
+		<title>FDS Online</title>
 		<input type="hidden" id="list_page" value="1"/>
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="static/foundation/bower_components/foundation/css/foundation.min.css?<?php print time(); ?>" />
@@ -12,7 +12,7 @@
 			<div id="main" class="small-12 columns">
 				<div class="row">
 					<div class="small-12 columns">
-						<h1 class="header">FDS Online</h1>
+						<h1 class="header"><a href="/">FDS Online</a></h1>
 						<h1>Online Simulator</h1>
 					</div>
 				</div>

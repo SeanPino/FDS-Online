@@ -1,7 +1,7 @@
 {
-	"name": "Pyro API Documentation",
+	"name": "FDS Online API Documentation",
 	"version": "1.0.0",
-	"description": "API Documentation for PyroSim",
-	"title": "Pyro API Docs",
+	"description": "API Documentation for FDS Online",
+	"title": "FDS Online API Docs",
 	"url": "http://pyro.demo"
 }
