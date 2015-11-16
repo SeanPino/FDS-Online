@@ -12,11 +12,16 @@ class P
 		/*
 		foreach ($files as $file) 
 		{
-			$timestamp = substr($file, 0, strpos($file, '/'));
-			$filename = substr($file, strpos($file, '/') + 1);
-			shell_exec('test.bat ' . $timestamp . ' ' . $filename);
-		}
-*/
+			*/
+		//var_dump($files);
+		//var_dump($timestamp);
+		$timestamp = substr($files[0], 0, strpos($files[0], '/'));
+		$filename = substr($files[0], strpos($files[0], '/') + 1);
+		//var_dump($timestamp);
+		//var_dump('test.bat ' . $timestamp . ' ' . $filename);
+		shell_exec('test.bat ' . $timestamp . ' '  . $filename);
+		/*}
+		
 		//var_dump($timestamp);
 		//print 'cd ' . 'uploads\\' . $timestamp . '\\; fds ' . $filename;
 		//shell_exec('cd ' . 'uploads\\' . $timestamp . '\\; fds ' . $filename);
@@ -38,11 +43,11 @@ class P
 		{
 		    $t->start();
 		}
-		
+		*/
 	}
 }
 
-
+/*
 class AsyncOperation extends Thread 
 {
     public function __construct($arg) 
@@ -63,7 +68,5 @@ class AsyncOperation extends Thread
     }
 }
 
-
-
-
+*/
 ?>
