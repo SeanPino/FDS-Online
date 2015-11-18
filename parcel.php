@@ -8,6 +8,11 @@ class P
 	public static function run()
 	{
 		$files = DB::queryFiles();
+		if($files == null)
+		{
+			print("No jobs to run currently");
+			return null;
+		}
 		//var_dump($files);
 		/*
 		foreach ($files as $file) 
@@ -19,7 +24,8 @@ class P
 		$filename = substr($files[0], strpos($files[0], '/') + 1);
 		//var_dump($timestamp);
 		//var_dump('test.bat ' . $timestamp . ' ' . $filename);
-		shell_exec('test.bat ' . $timestamp . ' '  . $filename);
+		shell_exec('singleprocess.bat ' . $timestamp . ' '  . $filename);
+		
 		/*}
 		
 		//var_dump($timestamp);
