@@ -11,7 +11,7 @@ $app = new \Slim\Slim();
  * @api {get} /api/v1/jobs/:id Get Job Status
  * @apiParam {Number} id Unique job ID.
  * @apiDescription Returns the status of the current job.
- * @apiGroup Jobs
+ * @apiGroup jobs
  * @apiName GetJob
  * @apiVersion 1.0.0
  * @apiExample {curl} Example usage:
@@ -31,7 +31,7 @@ $app->get('/api/v1/jobs/:id', function($id) use($app){
 /**
  * @api {get} /api/v1/list/ Get All Jobs
  * @apiDescription Returns a list of running and completed jobs.
- * @apiGroup Jobs
+ * @apiGroup list
  * @apiName GetJobs
  * @apiVersion 1.0.0
  * @apiExample {curl} Example usage:
@@ -49,7 +49,7 @@ $app->get('/api/v1/list/', function() use($app){
 /**
  * @api {delete} /api/v1/delete/:id Delete a Job
  * @apiDescription Deletes the specified job.
- * @apiGroup Jobs
+ * @apiGroup delete
  * @apiName DeleteJob
  * @apiVersion 1.0.0
  * @apiExample {curl}  Example usage:
@@ -60,9 +60,9 @@ $app->delete('/api/v1/delete/:id', function($id) use($app){
 });
 
 /**
- * @api {download} /api/v1/download/:id Download a finished job.
+ * @api {get} /api/v1/download/:id Download a finished job
  * @apiDescription Downloads a finished job.
- * @apiGroup Jobs
+ * @apiGroup download
  * @apiName DownloadJob
  * @apiVersion 1.0.0
  * @apiExample {curl} Example usage:
@@ -93,9 +93,9 @@ $app->get('/api/v1/download/:id', function($id)
 });
 
 /**
- * @api {jobs} /api/v1/download/jobs Upload job.
+ * @api {post} /api/v1/jobs Upload job
  * @apiDescription Uploads a new job.
- * @apiGroup Jobs
+ * @apiGroup jobs
  * @apiName UploadJob
  * @apiVersion 1.0.0
  * @apiExample {curl} Example usage:
@@ -130,9 +130,9 @@ $app->post('/api/v1/jobs/', function() use($app){
 });
 
 /**
- * @api {wipe} /api/v1/wipe/ Erases all jobs.
+ * @api {get} /api/v1/wipe/ Erases all jobs.
  * @apiDescription Erases all jobs (Testing purposes only).
- * @apiGroup Jobs
+ * @apiGroup wipe
  * @apiName WipeJobs
  * @apiVersion 1.0.0
  * @apiExample {curl} Example usage:
