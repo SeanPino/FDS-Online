@@ -1,11 +1,10 @@
 // var BASE_URL = 'http://pyro.demo/';
 var REFRESH_INT = 5000; //5 second refresh rate, change to 60000
-
+$("#loading-image").show();
 function getList(){
-	console.log("Getting list");
 	$.ajax({
 		//url: 'api/v1/jobs',
-		url: '/api/v1/list/',
+		url: 'api/v1/list/',
 		type: 'GET',
 		//data: data,
 		cache: false,
@@ -35,7 +34,7 @@ function getList(){
 					percent = parseFloat(result[x]["progress"]) + '%';
 					if(parseFloat(result[x]["progress"]) == 100)
 					{
-						output += ("<tr><td class='center'>" + result[x]["id"] + "</td><td class='center'>" + result[x]["name"] + "</td><td class='center'>" + status + "</td><td class='center'><div class='progress small-12 alert'><span class='meter' style='width: " + percent + "'>" + percent + "</span></div><form action='/api/v1/download/" + result[x]["id"] + "' method='get'><input type='button' value='Download' /></form></td></tr>");
+						output += ("<tr><td class='center'>" + result[x]["id"] + "</td><td class='center'>" + result[x]["name"] + "</td><td class='center'>" + status + "</td><td class='center'><div class='progress small-12 alert'><span class='meter' style='width: " + percent + "'>" + percent + "</span></div><a href='/api/v1/download/" + result[x]["id"] + "' class='button tiny'>Download</a></td></tr>");
 					}
 					else
 					{
@@ -49,11 +48,16 @@ function getList(){
 		error: function (object, status, error) {
 			console.log("The response text: " + object.responseText);
 			console.log("There was an error: " + error);
+			$("#results").html("<p>No jobs in storage.</p>");
+		},
+		complete: function () {
+			$("#loading-image").hide();
 		}
 	});
 }
 
 $(document).ready(function () {
+
 	if($('#list_page').length > 0) {
 		getList();
 		window.setInterval(function(){

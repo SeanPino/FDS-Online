@@ -2,11 +2,60 @@
 require ("rb.php");
 require ("papercut.php");
 R::setup("sqlite:db/database.db");
-define('threadCount', '3');
 
+$global_filename = '';
+$global_filepath = '';
 class DB
 {
-	public static function AddJob($filename) 
+	public static function Zip($source, $destination)
+	{
+		if(!extension_loaded('zip') || !file_exists($source))
+		{
+			return false;
+		}
+
+		$zip = new ZipArchive();
+		if(!$zip->open($destination, ZIPARCHIVE::CREATE))
+		{
+			return false;
+		}
+
+		$source = str_replace('\\', '/', realpath($source));
+
+		if(is_dir($source) === true)
+		{
+			$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+			foreach($files as $file)
+			{
+				$file = str_replace('\\', '/', $file);
+
+				if(in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
+				{
+					continue;
+				}
+
+				$file = realpath($file);
+
+				if(is_dir($file) === true)
+				{
+					$zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+				}
+				elseif(is_file($file) === true)
+				{
+					$zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+				}
+			}
+		}
+		elseif(is_file($source) === true)
+		{
+			$zip->addFromString(basename($source), file_get_contents($source));
+		}
+
+		return $zip->close();
+	}
+
+	public static function AddJob($filename)
 	{
 		$w = R::dispense('job');
 		$w->name = $filename;
@@ -14,7 +63,8 @@ class DB
 		$w->timestamp = $t;
 		$w->status = R::enum('status:Queued');
 		$w->progress = 0;
-		$id = R::store($w);
+		$w->is_zipped = 0;
+		$id = R::store( $w );
 		$bean = R::load('job', $id);
 		$bean->filename = $filename;
 		http_response_code(200);
@@ -41,9 +91,12 @@ class DB
 	{
 		$job = R::load('job', $id);
 		print_r(json_decode($job));
+	}
+
+	public static function GetJob($id)
+	{
+		$job = R::load('job', $id);
 		return $job;
-		 // Added by Shawn C.
-		
 	}
 	
 	public static function DeleteJob($id, $app) 
@@ -109,15 +162,39 @@ class DB
 		{
 			$percentage = 100;
 			$job->status = R::enum('status:Completed');
-		} 
-		else if ($percentage < 100 && $percentage > 0) 
+			DB::zip_file($id);
+		}
+		else if ($percentage < 100 && $percentage > 0)
 		{
 			$job->status = R::enum('status:In Progress');
 		}
 		$job->progress = $percentage;
 		R::store($job);
 	}
-	
+
+	public static function zip_file($id)
+	{
+		set_time_limit(0);
+		$job = DB::GetJob($id);
+		if($job->is_zipped === 0)
+		{
+			if(!is_writeable("uploads/" . $timestamp)){
+				die("Cannot write in the uploads directory.");
+			}
+			if(!file_exists('archives'))
+			{
+				mkdir('archives', 0777, true);
+			}
+			if(!file_exists('archives/' . $timestamp))
+			{
+				mkdir('archives/' . $timestamp, 0777, true);
+			}
+
+			DB::Zip('uploads/' . $timestamp, 'archives/' . $timestamp . '/' . $name . '.zip');
+			$job->is_zipped = 1;
+		}
+	}
+
 	//debug function
 	public static function MakeJob($filename) 
 	{
