@@ -4,6 +4,8 @@
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="/static/foundation/bower_components/foundation/css/foundation.min.css?<?php print time(); ?>" />
 		<link rel="stylesheet" href="/static/foundation/stylesheets/app.css?<?php print time(); ?>" />
+        <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
 		<script src="/static/foundation/bower_components/foundation/js/vendor/modernizr.js?<?php print time(); ?>"></script>
 		<script src="/static/foundation/bower_components/foundation/js/vendor/jquery.js"></script>
 		<script src="/static/js/mustache.js?<?php print time(); ?>"></script>
@@ -24,7 +26,7 @@
 					</div>
 					<div class="row">
 						<div id="docs" class="small-12 columns">
-							
+
 						</div>
 					</div>
 				</div>
@@ -51,10 +53,10 @@
 			</div>
 
 		<script src="/static/foundation/bower_components/foundation/js/vendor/fastclick.js"></script>
-		
+
 		<script src="/static/foundation/bower_components/foundation/js/foundation.min.js"></script>
-		
-		
+
+
 		<script>
 			$(document).foundation();
 		</script>

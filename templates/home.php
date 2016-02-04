@@ -5,6 +5,8 @@
 		<link rel="stylesheet" href="static/foundation/bower_components/foundation/css/foundation.min.css?<?php print time(); ?>" />
 		<link rel="stylesheet" href="static/foundation/stylesheets/app.css?<?php print time(); ?>" />
 		<script src="static/foundation/bower_components/foundation/js/vendor/modernizr.js?<?php print time(); ?>"></script>
+        <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
 	</head>
 	<body>
 		<div class="row">

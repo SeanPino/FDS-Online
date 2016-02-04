@@ -5,6 +5,8 @@
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="static/foundation/bower_components/foundation/css/foundation.min.css?<?php print time(); ?>" />
 		<link rel="stylesheet" href="static/foundation/stylesheets/app.css?<?php print time(); ?>" />
+        <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
 		<script src="static/foundation/bower_components/foundation/js/vendor/modernizr.js?<?php print time(); ?>"></script>
 	</head>
 	<body>
@@ -59,7 +61,7 @@
 					</div>
 				</div>
 			</div>
-		</div>	
+		</div>
 		<script src="static/foundation/bower_components/foundation/js/vendor/jquery.js"></script>
 		<script src="static/foundation/bower_components/foundation/js/vendor/fastclick.js"></script>
 		<script src="static/foundation/bower_components/foundation/js/foundation.min.js"></script>
