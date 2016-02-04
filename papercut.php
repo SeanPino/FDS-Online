@@ -124,5 +124,24 @@ class pc
 		$number = $line[$lineNum];
 		return $number;
 	}
+
+	public static function CountMeshes($filename)
+	{
+		$meshCount = 0;
+		$result = file_exists("uploads/" . $filename);
+		if (file_exists("uploads/" . $filename)) 
+		{
+			$file = pc::createTempFile("uploads/" . $filename);
+			$lineCount = count($file);
+			for($i = 0; $i < $lineCount; $i++)
+			{
+				if (strpos($file[$i], "MESH") != false) 
+				{
+					$meshCount++;
+				}
+			}
+		}
+		return $meshCount;
+	}
 }
 ?>

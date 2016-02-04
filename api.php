@@ -78,25 +78,41 @@ $app->delete('/api/v1/delete/:id', function ($id) use ($app)
 $app->get('/api/v1/download/:id', function($id)
 {
 	$job = DB::GetJob($id);
+
+	//print $id;
 	
-	$timestamp = $job["timestamp"];
-	$name = preg_replace('/\\.[^.\\s]{3,4}$/', '', $job["name"]);
-
-	$global_filename = $name . '.zip';
-	$global_filepath = 'archives/' . $timestamp . '/';
-
-	header("Pragma: public");
-	header("Expires: 0");
-	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-	header("Cache-Control: public");
-	header("Content-Description: File Transfer");
-	header("Content-type: application/octet-stream");
-	header("Content-Disposition: attachment; filename=\"" . $global_filename . "\"");
-	header("Content-Transfer-Encoding: binary");
-	header("Content-Length: " . filesize($global_filepath . $global_filename));
-	ob_end_flush();
-	ob_end_clean();
-	@readfile($global_filepath . $global_filename);
+	// Get the job to be downloaded.
+	//        $job = DB::FindJob($id, $app);
+	//        echo $id . "<br />";
+	//        $job["timestamp"] = 1446044514;
+	//        // Create the zip.
+	//        $zip = new ZipArchive();
+	//        echo "uploads/" . $job["timestamp"] . "/" . $job["timestamp"] . ".zip<br />";
+	//        // Add everything except the original FDS file to the list of stuff to zip.
+	//        $zip->open("uploads/" . $job["timestamp"] . "/" . $job["timestamp"] . ".zip", ZipArchive::CREATE);
+	//        $files = scandir(".");
+	//        foreach($files as $f){
+	//            echo $f;
+	//            if(substr($f, -4) !== ".fds"){  // Don't include the original FDS file.
+	//                $zip->addFile($f);
+	//            }
+	//        }
+	//        $zip->close();
+	//
+	//        // Now make it available for download.
+	//        return $zip;
+	chmod(".", 0777);
+	$zip = new ZipArchive();
+	$files = scandir(".");
+	$zip->open("zip.zip", ZipArchive::CREATE);
+	// var_dump($zip);
+	foreach ($files as $f) 
+	{
+		$zip->addFile($f);
+	}
+	$res = $zip->close();
+	return $zip;
+	// var_dump($res);
 });
 
 /**
