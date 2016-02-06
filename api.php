@@ -37,6 +37,13 @@ $app->get('/api/v1/jobs/:id', function ($id) use ($app)
  * @apiExample {curl} Example usage:
  *     curl -X GET 'http://pyro.demo/api/v1/list/'
  * @apiError (400 Bad Request) {Number} response 400
+ * @apiSuccess (200 OK) {String} No jobs in your table if there are no jobs.
+ * @apiSuccess (200 OK) {Number} id The unique job ID.
+ * @apiSuccess (200 OK) {String} name The job's name.
+ * @apiSuccess (200 OK) {Number} timestamp The timestamp of when the job was uploaded.
+ * @apiSuccess (200 OK) {Number} progress The progress state of the job.
+ * @apiSuccess (200 OK) {Number} is_zipped If the job has been completed and zipped for download.
+ * @apiSuccess (200 OK) {String} filename The name of the uploaded file.
  */
 
 // Show a list of running and completed tasks.
@@ -56,14 +63,16 @@ $app->get('/api/v1/list/', function () use ($app)
  * @apiDescription Deletes the specified job.
  * @apiGroup delete
  * @apiName DeleteJob
+ * @apiParam {Number} id The ID of the job to delete.
  * @apiVersion 1.0.0
  * @apiExample {curl}  Example usage:
  *      curl -X DELETE 'http://pyro.demo/api/v1/delete/1'
  * @apiError (400 Bad Request) {Number} response 400
+ * @apiSuccess (200 OK) {Number} response 200
  */
 $app->delete('/api/v1/delete/:id', function ($id) use ($app) 
 {
-	DB::DeleteJob($id, $app);
+	return DB::DeleteJob($id, $app);
 });
 
 /**
@@ -71,6 +80,7 @@ $app->delete('/api/v1/delete/:id', function ($id) use ($app)
  * @apiDescription Downloads a finished job.
  * @apiGroup download
  * @apiName DownloadJob
+ * @apiParam {Number} id The ID of the job to download.
  * @apiVersion 1.0.0
  * @apiExample {curl} Example usage:
  *      curl -X GET 'http://pyro.demo/api/v1/download/1'
@@ -123,6 +133,12 @@ $app->get('/api/v1/download/:id', function($id)
  * @apiVersion 1.0.0
  * @apiExample {curl} Example usage:
  *      curl -X POST -F 'file=@example.fds' 'http://pyro.demo/api/v1/jobs'
+ * @apiSuccess (200 OK) {Number} id The unique job ID.
+ * @apiSuccess (200 OK) {String} name The job's name.
+ * @apiSuccess (200 OK) {Number} timestamp The timestamp of when the job was uploaded.
+ * @apiSuccess (200 OK) {Number} progress The progress state of the job.
+ * @apiSuccess (200 OK) {Number} is_zipped If the job has been completed and zipped for download.
+ * @apiSuccess (200 OK) {String} filename The name of the uploaded file.
  */
 $app->post('/api/v1/jobs/', function () use ($app) 
 {
