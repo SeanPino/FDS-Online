@@ -5,3 +5,6 @@ db/*
 databaseTest.php
 papercutTest.php
 parcelTest.php
+cache/*
+vendor/*
+.DS_Store
