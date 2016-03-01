@@ -29,6 +29,44 @@ $app->get('/api/v1/jobs/:id', function ($id) use ($app)
 });
 
 /**
+ * @api {get} /api/v1/stop/:id Stop (Pause) Job
+ * @apiParam {Number} id Unique job ID.
+ * @apiDescription Stop (Pause) the job specified.
+ * @apiGroup jobs
+ * @apiName StopJob
+ * @apiVersion 1.0.0
+ * @apiExample {curl} Example usage:
+ *     curl -X GET 'http://pyro.demo/api/v1/stop/1'
+ * @apiError (400 Bad Request) {Number} response 400
+ * @apiError (400 Bad Request) {String} message The ID supplied is invalid or does not exist.
+ * @apiSuccess (200 OK) {Number} id ID of current job.
+ * @apiSuccess (200 OK) {String} status Status of the current job.
+ */
+$app->get('/api/v1/stop/:id', function ($id) use ($app)
+{
+	DB::StopJob($id, $app);
+});
+
+/**
+ * @api {get} /api/v1/start/:id Start (Resume) Job
+ * @apiParam {Number} id Unique job ID.
+ * @apiDescription Start (Resume) the job specified.
+ * @apiGroup jobs
+ * @apiName StartJob
+ * @apiVersion 1.0.0
+ * @apiExample {curl} Example usage:
+ *     curl -X GET 'http://pyro.demo/api/v1/start/1'
+ * @apiError (400 Bad Request) {Number} response 400
+ * @apiError (400 Bad Request) {String} message The ID supplied is invalid or does not exist.
+ * @apiSuccess (200 OK) {Number} id ID of current job.
+ * @apiSuccess (200 OK) {String} status Status of the current job.
+ */
+$app->get('/api/v1/start/:id', function ($id) use ($app)
+{
+	DB::StartJob($id, $app);
+});
+
+/**
  * @api {get} /api/v1/list/ Get All Jobs
  * @apiDescription Returns a list of running and completed jobs.
  * @apiGroup list
