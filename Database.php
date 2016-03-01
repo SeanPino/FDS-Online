@@ -88,6 +88,57 @@ class DB
 			print $error;
 		}
 	}
+
+	public static function StartJob($id, $app)
+	{
+		$job = R::load('job', $id);
+		$path = 'uploads/' . $job['timestamp'] . '/' . $job['name'];
+		$newPath = substr($path, 0, -3) . 'stop';
+		if (file_exists($newPath))
+		{
+			if (unlink($newPath))
+			{
+				$oldContent = file_get_contents($path);
+				$file = fopen($path, 'w');
+				if( strpos($oldContent, "&MISC RESTART=.TRUE. /") === false)
+				{
+					rewind($file);
+					if (fwrite($file, "&MISC RESTART=.TRUE. /\n"))
+					{
+						fwrite($file, $oldContent);
+						fclose($file);
+						$app->response()->status(200);
+						$success = "Job ready for restart.";
+						print $success;
+					}
+					else
+					{
+						$app->response()->status(400);
+						$error = "The ID supplied is invalid or does not exist.";
+						print $error;
+					}
+				}
+				else
+				{
+					$app->response()->status(200);
+					$success = "Job ready for restart.";
+					print $success;
+				}
+			}
+			else
+			{
+				$app->response()->status(400);
+				$error = "The .stop file could not be deleted.";
+				print $error;
+			}
+		}
+		else
+		{
+			$app->response()->status(400);
+			$error = "The job was never stopped (paused).";
+			print $error;
+		}
+	}
 	
 	public static function FindJob($id) 
 	{
