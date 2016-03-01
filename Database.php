@@ -94,48 +94,57 @@ class DB
 		$job = R::load('job', $id);
 		$path = 'uploads/' . $job['timestamp'] . '/' . $job['name'];
 		$newPath = substr($path, 0, -3) . 'stop';
-		if (file_exists($newPath))
+		if ($job->id !== 0)
 		{
-			if (unlink($newPath))
+			if (file_exists($newPath))
 			{
-				$oldContent = file_get_contents($path);
-				$file = fopen($path, 'w');
-				if( strpos($oldContent, "&MISC RESTART=.TRUE. /") === false)
+				if (unlink($newPath))
 				{
-					rewind($file);
-					if (fwrite($file, "&MISC RESTART=.TRUE. /\n"))
+					$oldContent = file_get_contents($path);
+					$file = fopen($path, 'w');
+					if( strpos($oldContent, "&MISC RESTART=.TRUE. /") === false)
 					{
-						fwrite($file, $oldContent);
-						fclose($file);
+						rewind($file);
+						if (fwrite($file, "&MISC RESTART=.TRUE. /\n"))
+						{
+							fwrite($file, $oldContent);
+							fclose($file);
+							$app->response()->status(200);
+							$success = "Job ready for restart.";
+							print $success;
+						}
+						else
+						{
+							$app->response()->status(400);
+							$error = "The .fds file could not be edited.";
+							print $error;
+						}
+					}
+					else
+					{
 						$app->response()->status(200);
 						$success = "Job ready for restart.";
 						print $success;
 					}
-					else
-					{
-						$app->response()->status(400);
-						$error = "The ID supplied is invalid or does not exist.";
-						print $error;
-					}
 				}
 				else
 				{
-					$app->response()->status(200);
-					$success = "Job ready for restart.";
-					print $success;
+					$app->response()->status(400);
+					$error = "The .stop file could not be deleted.";
+					print $error;
 				}
 			}
 			else
 			{
 				$app->response()->status(400);
-				$error = "The .stop file could not be deleted.";
+				$error = "The job was never stopped (paused).";
 				print $error;
 			}
 		}
 		else
 		{
 			$app->response()->status(400);
-			$error = "The job was never stopped (paused).";
+			$error = "The job with ID " . $id . " does not exist.";
 			print $error;
 		}
 	}
