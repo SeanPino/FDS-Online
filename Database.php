@@ -168,7 +168,10 @@ class DB
 		}
 		else if ($percentage < 100 && $percentage > 0)
 		{
-			$job->status = R::enum('status:In Progress');
+			if (!($job->status == R::enum('status:Stopped')->id))
+			{
+				$job->status = R::enum('status:In Progress');
+			}
 		}
 		$job->progress = $percentage;
 		R::store($job);
@@ -271,6 +274,18 @@ class DB
 		{
 			return null;
 		}
+	}
+
+	public static function StopJob($id, $app)
+	{
+		$job = DB::GetJob($id);
+		$filename = $job['name'];
+		$timestamp = $job['timestamp'];
+		$path = "uploads/" .$timestamp . '/' . substr($filename, 0, strlen($filename)-4);
+		$myfile = fopen($path .".stop", "w");
+		$job->status = R::enum('status:Stopped');
+		$app->response(200);
+
 	}
 }
 ?>

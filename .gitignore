@@ -8,3 +8,4 @@ parcelTest.php
 cache/*
 vendor/*
 .DS_Store
+TestStop.php
