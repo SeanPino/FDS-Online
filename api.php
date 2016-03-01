@@ -57,7 +57,7 @@ $app->get('/api/v1/stop/:id', function ($id) use ($app)
  * @apiExample {curl} Example usage:
  *     curl -X GET 'http://pyro.demo/api/v1/start/1'
  * @apiError (400 Bad Request) {Number} response 400
- * @apiError (400 Bad Request) {String} message The ID supplied is invalid or does not exist.
+ * @apiError (400 Bad Request) {String} message Error message.
  * @apiSuccess (200 OK) {Number} id ID of current job.
  * @apiSuccess (200 OK) {String} status Status of the current job.
  */
