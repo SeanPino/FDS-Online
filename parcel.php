@@ -1,6 +1,6 @@
 <?php
-$ini = parse_ini_file('config.ini');
-define('threadCount', $ini['threadCount']);
+//$ini = parse_ini_file('config.ini');
+//define('threadCount', $ini['threadCount']);
 require('Database.php');
 require('painkiller.php');
 
@@ -23,11 +23,11 @@ class P
 		//var_dump($timestamp);
 		$timestamp = substr($files[0], 0, strpos($files[0], '/'));
 		$filename = substr($files[0], strpos($files[0], '/') + 1);
-		$numCpus = Pain::ConfigJob($filename);
+		//$numCpus = Pain::ConfigJob($filename);
 
-		//shell_exec('singleprocess.bat ' . $timestamp . ' '  . $filename . ' '  );
+		shell_exec('singleprocess.bat ' . $timestamp . ' '  . $filename . ' '  );
 		//print('multipleprocessors.bat ' . $timestamp . ' ' . $filename . ' ' . $numCpus);
-		shell_exec('multipleprocesses.bat ' . $timestamp . ' ' . $filename . ' ' . $numCpus);
+		//shell_exec('multipleprocesses.bat ' . $timestamp . ' ' . $filename . ' ' . $numCpus);
 		
 		//var_dump($timestamp);
 		//var_dump('test.bat ' . $timestamp . ' ' . $filename);

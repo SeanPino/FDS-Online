@@ -344,6 +344,7 @@ class DB
 		$path = "uploads/" .$timestamp . '/' . substr($filename, 0, strlen($filename)-4);
 		$myfile = fopen($path .".stop", "w");
 		$job->status = R::enum('status:Stopped');
+		R::store($job);
 		$app->response(200);
 
 	}
