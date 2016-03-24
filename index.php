@@ -1,5 +1,7 @@
 <?php
 require 'vendor/autoload.php';
+define('PATH', $_SERVER['SERVER_NAME']);
+\Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim();
 
@@ -17,60 +19,23 @@ $app->container->singleton('twig', function ($c)
     return $twig;
 });
 
-function version()
-{
-    return '1.0.0';
-}
+// Help is on the way
+require 'helper.php';
 
-function sprint()
-{
-    $date1 = new DateTime('2015-09-02');
-    $date2 = new DateTime();
-    $interval = $date1->diff($date2);
-    $status = array();
-    $status['sprint'] = 1 + floor($interval->days / 14);
-    $status['day'] = ($interval->days % 14) + 1;
+// Include our route definitions
+// and the API endpoints
+require 'routes.php';
+require 'api.php';
 
-    return $status;
-}
+// Initialize the API
+$api = new API($app);
+$api->initEndpoints();
 
-function baseUrl()
-{
-    $url = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
-    return str_replace("/index.php", "", $url);
-}
-
+// App hooks
 $app->hook('slim.before', function () use ($app)
 {
     $app->view()->appendData(array('baseUrl' => baseUrl()));
 });
-
-$app->get('/', function () use ($app)
-{
-    $app->render('home.php', array('sprint' => sprint(), 'version' => version()));
-})->name('home');
-
-$app->get('/list', function () use ($app)
-{
-    $app->render('list.php', array('sprint' => sprint(), 'version' => version()));
-})->name('list');
-
-$app->get('/login', function () use ($app)
-{
-    $app->render('login.php', array('sprint' => sprint(), 'version' => version()));
-})->name('login');
-
-// TODO
-$app->get('/create-account', function () use ($app)
-{
-    $app->render('createAccount.php', array('sprint' => sprint(), 'version' => version()));
-})->name('create-account');
-
-// TODO
-$app->get('/forgot-password', function () use ($app)
-{
-    $app->render('forgotPassword.php', array('sprint' => sprint(), 'version' => version()));
-})->name('forgot-password');
 
 $app->run();
 ?>
