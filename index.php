@@ -1,7 +1,5 @@
 <?php
-require 'vendor/autoload.php';
-define('PATH', $_SERVER['SERVER_NAME']);
-\Slim\Slim::registerAutoloader();
+require_once 'vendor/autoload.php';
 
 $app = new \Slim\Slim();
 
@@ -20,16 +18,11 @@ $app->container->singleton('twig', function ($c)
 });
 
 // Help is on the way
-require 'helper.php';
+require_once 'helper.php';
 
 // Include our route definitions
 // and the API endpoints
-require 'routes.php';
-require 'api.php';
-
-// Initialize the API
-$api = new API($app);
-$api->initEndpoints();
+require_once 'routes.php';
 
 // App hooks
 $app->hook('slim.before', function () use ($app)
