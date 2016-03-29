@@ -60,9 +60,9 @@ $(document).ready(function () {
 
 	if($('#list_page').length > 0) {
 		getList();
-		window.setInterval(function(){
+/*		window.setInterval(function(){
 			getList();
-		}, REFRESH_INT);
+		}, REFRESH_INT);*/
 	}
 
 	var files;
