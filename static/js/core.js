@@ -80,7 +80,7 @@ $(document).ready(function () {
 		data.append('file', files);
 
 		$.ajax({
-			url: 'api/v1/jobs',
+			url: '/api/v1/jobs',
 			type: 'POST',
 			data: data,
 			cache: false,
