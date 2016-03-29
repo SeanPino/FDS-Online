@@ -1,25 +1,25 @@
-let gulp = require('gulp'),
-    exec = require('exec'),
-    watch = require('gulp-watch');
+var gulp = require('gulp');
+var exec = require('exec');
 
-let ADD = 'add';
-
-let paths = {
+var paths = {
   jobs: ['../uploads/**/*.fds'],
   parcel: ['../parcel.php']
 };
 
-//var runCommand = "php -r 'require \"" + paths.parcel + "\"; P::run();'";
+var runCommand = "php -r 'require \"" + paths.parcel + "\"; P::run();'";
 
 gulp.task('jobs', function () {
-
-});
-
-gulp.task('watch', function() {
-  watch(paths.jobs, function (vinyl) {
-    if (vinyl.event == ADD)
-      console.log("Houston, we have a new FDS job");
+  exec([runCommand], function(err, out, code) {
+    if (err instanceof Error)
+      throw err;
+    process.stderr.write(err);
+    process.stdout.write(out);
+    process.exit(code);
   });
 });
 
-gulp.task('default', ['watch']);
+gulp.task('watch', function() {
+  gulp.watch(paths.jobs, ['jobs']);
+});
+
+gulp.task('default', ['watch', 'jobs']);
