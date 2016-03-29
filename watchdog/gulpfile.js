@@ -1,10 +1,10 @@
-var gulp = require('gulp'),
+let gulp = require('gulp'),
     exec = require('exec'),
     watch = require('gulp-watch');
 
-const ADD = 'add';
+let ADD = 'add';
 
-var paths = {
+let paths = {
   jobs: ['../uploads/**/*.fds'],
   parcel: ['../parcel.php']
 };
