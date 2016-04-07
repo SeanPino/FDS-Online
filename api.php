@@ -3,7 +3,7 @@ require ("vendor/slim/slim/Slim/Slim.php");
 require ("Database.php");
 \Slim\Slim::registerAutoloader();
 define('PATH', $_SERVER['SERVER_NAME']);
-
+date_default_timezone_set('UTC');
 $app = new \Slim\Slim();
 
 /**
