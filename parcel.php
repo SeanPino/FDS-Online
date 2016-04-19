@@ -24,7 +24,7 @@ class P
 		$timestamp = substr($files[0], 0, strpos($files[0], '/'));
 		$filename = substr($files[0], strpos($files[0], '/') + 1);
 		//$numCpus = Pain::ConfigJob($filename);
-
+                echo $timestamp . '<br>' . $filename;
 		shell_exec('singleprocess.bat ' . $timestamp . ' '  . $filename . ' '  );
 		//print('multipleprocessors.bat ' . $timestamp . ' ' . $filename . ' ' . $numCpus);
 		//shell_exec('multipleprocesses.bat ' . $timestamp . ' ' . $filename . ' ' . $numCpus);
@@ -59,7 +59,7 @@ class P
 		*/
 	}
 }
-
+P::run();
 /*
 class AsyncOperation extends Thread 
 {

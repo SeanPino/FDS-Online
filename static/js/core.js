@@ -22,19 +22,22 @@ function getList(){
 						case 1:
 						status = "In Queue";
 						break;
-						case 2:
+//						case 2:
+//						status = "Paused";
+//						break;
+						case 3:
 						status = "Processing";
 						break;
-						case 3:
-						status = "Completed";
-						break;
+                                                case 4:
+                                                status = "Completed";
+                                                break;
 						default:
 						status = "Error";
 					}
 					percent = parseFloat(result[x]["progress"]) + '%';
 					if(parseFloat(result[x]["progress"]) == 100)
 					{
-						output += ("<tr><td class='center'>" + result[x]["id"] + "</td><td class='center'>" + result[x]["name"] + "</td><td class='center'>" + status + "</td><td class='center'><div class='progress small-12 alert'><span class='meter' style='width: " + percent + "'>" + percent + "</span></div><form action='/api/v1/download/" + result[x]["id"] + "' method='get'><input type='submit' class='button tiny' value='Download' /></form></td></tr>");
+						output += ("<tr><td class='center'>" + result[x]["id"] + "</td><td class='center'>" + result[x]["name"] + "</td><td class='center'>" + status + "</td><td class='center'><div class='progress small-12 alert'><span class='meter' style='width: " + percent + "'>" + percent + "</span></div><form action='api/v1/download/" + result[x]["id"] + "' method='get'><input type='submit' class='button tiny' value='Download' /></form></td></tr>");
 					}
 					else
 					{
@@ -57,12 +60,11 @@ function getList(){
 }
 
 $(document).ready(function () {
-
 	if($('#list_page').length > 0) {
 		getList();
-/*		window.setInterval(function(){
+		window.setInterval(function(){
 			getList();
-		}, REFRESH_INT);*/
+		}, REFRESH_INT);
 	}
 
 	var files;

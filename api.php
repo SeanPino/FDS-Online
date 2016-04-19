@@ -152,14 +152,18 @@ $app->get('/api/v1/download/:id', function($id)
 	chmod(".", 0777);
 	$zip = new ZipArchive();
 	$files = scandir(".");
-	$zip->open("zip.zip", ZipArchive::CREATE);
+	//$zip->open("zip.zip", ZipArchive::CREATE);
+        echo 'completed/' . $job['timestamp'] . '/' . $job['timestamp'] . '.zip';
+        $zip->open('completed/' . $job['timestamp'] . '/' . $job['timestamp'] . '.zip', ZipArchive::CREATE);
 	// var_dump($zip);
 	foreach ($files as $f) 
 	{
 		$zip->addFile($f);
 	}
-	$res = $zip->close();
-	return $zip;
+	//$res = $zip->close();
+        $zip->close();
+	//return $zip;
+        readfile('completed/' . $job['timestamp'] . $job['timestamp'] . '.zip');
 	// var_dump($res);
 });
 
