@@ -224,7 +224,7 @@ class DB
 		{
 			$percentage = 100;
 			$job->status = R::enum('status:Completed');
-			DB::zip_file($id);
+			//DB::zip_file($id);
 		}
 		else if ($percentage < 100 && $percentage > 0)
 		{
