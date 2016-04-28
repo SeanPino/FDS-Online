@@ -28,6 +28,9 @@ function getList(){
 						case 3:
 						status = "Completed";
 						break;
+						case 4:
+						status = "Completed";
+						break;
 						default:
 						status = "Error";
 					}
