@@ -72,15 +72,15 @@ class DB
 		http_response_code(200);
 		print $bean;
 	}
-	
-	public static function ListJobs($app) 
+
+	public static function ListJobs($app)
 	{
 		$bool = DB::refreshJobs();
-		if ($bool[0]) 
+		if ($bool[0])
 		{
 			$app->response()->status(200);
 			print json_encode($bool[1]);
-		} 
+		}
 		else
 		{
 			$app->response()->status(400);
@@ -148,8 +148,8 @@ class DB
 			print $error;
 		}
 	}
-	
-	public static function FindJob($id) 
+
+	public static function FindJob($id)
 	{
 		$job = R::load('job', $id);
 		print_r(json_decode($job));
@@ -160,13 +160,13 @@ class DB
 		$job = R::load('job', $id);
 		return $job;
 	}
-	
-	public static function DeleteJob($id, $app) 
+
+	public static function DeleteJob($id, $app)
 	{
 		$job = R::load('job', $id);
 		$filename = $job['name'];
 		$timestamp = $job['timestamp'];
-		
+
 		//$bool = DB::deleteDir("uploads\\" . $timestamp);
 		// if(!$bool)
 		// {
@@ -175,12 +175,12 @@ class DB
 		// 	return json_encode($error);
 		// }
 		$result = R::trash('job', $id);
-		if ($result) 
+		if ($result)
 		{
 			$app->response()->status(200);
 			$response = "Job {$id} has been deleted.";
 			return json_encode($response);
-		} 
+		}
 		else
 		{
 			$app->response()->status(400);
@@ -188,27 +188,27 @@ class DB
 			return json_encode($error);
 		}
 	}
-	
+
 	/*
-	public static function deleteDir($dirPath) 
+	public static function deleteDir($dirPath)
 	{
-	    if (!is_dir($dirPath)) 
+	    if (!is_dir($dirPath))
 	    {
 	        //throw new InvalidArgumentException("$dirPath must be a directory");
 	        return false;
 	    }
-	    if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') 
+	    if (substr($dirPath, strlen($dirPath) - 1, 1) != '/')
 	    {
 	        $dirPath .= '/';
 	    }
 	    $files = glob($dirPath . '*', GLOB_MARK);
-	    foreach ($files as $file) 
+	    foreach ($files as $file)
 	    {
-	        if (is_dir($file)) 
+	        if (is_dir($file))
 	        {
 	            self::deleteDir($file);
-	        } 
-	        else 
+	        }
+	        else
 	        {
 	            unlink($file);
 	        }
@@ -216,11 +216,11 @@ class DB
 	    rmdir($dirPath);
 	    return true;
 	}*/
-	
-	public static function UpdateStatus($id, $percentage) 
+
+	public static function UpdateStatus($id, $percentage)
 	{
 		$job = R::load('job', $id);
-		if ($percentage >= 100) 
+		if ($percentage >= 100)
 		{
 			$percentage = 100;
 			$job->status = R::enum('status:Completed');
@@ -228,7 +228,7 @@ class DB
 		}
 		else if ($percentage < 100 && $percentage > 0)
 		{
-			if (!($job->status == R::enum('status:Stopped')->id))
+			if ($job->status != R::enum('status:Stopped')->id)
 			{
 				$job->status = R::enum('status:In Progress');
 			}
@@ -261,7 +261,7 @@ class DB
 	}
 
 	//debug function
-	public static function MakeJob($filename) 
+	public static function MakeJob($filename)
 	{
 		$w = R::dispense('job');
 		$w->name = $filename;
@@ -271,23 +271,23 @@ class DB
 		$w->status = R::enum('status:Queued');
 		$id = R::store($w);
 	}
-	
-	public static function refreshJobs() 
+
+	public static function refreshJobs()
 	{
 		$jobs = R::find('job');
-		if (!count($jobs)) 
+		if (!count($jobs))
 		{
 			return array(false);
 		}
-		
+
 		$beans = R::exportAll($jobs);
-		foreach ($beans as $bean) 
+		foreach ($beans as $bean)
 		{
 			$percentage = pc::getTime($bean["timestamp"] . '/' . substr($bean["name"], 0, strrpos($bean["name"], '.')) . ".out", $bean["id"]);
-			if ($percentage != null) 
+			if ($percentage != null)
 			{
 				DB::UpdateStatus($bean["id"], round($percentage, 2));
-			} 
+			}
 			else
 			{
 				DB::UpdateStatus($bean["id"], 0);
@@ -295,41 +295,41 @@ class DB
 		}
 		return array(true, $beans);
 	}
-	
-	public static function queryFiles() 
+
+	public static function queryFiles()
 	{
 		$toRunJobs = array();
-		
+
 		//refresh jobs
 		$result = DB::refreshJobs();
-		
+
 		//check result for true return or false return
-		
+
 		//find out how many are running currently
 		$inProgress = R::find('job', ' status_id = ? ', [R::enum('status:In Progress')->id]);
 		$count = count($inProgress);
-		if ($count < threadCount) 
+		if ($count < threadCount)
 		{
-			
+
 			//query for next jobs
 			$jobs = R::find('job', ' status_id = ? ', [R::enum('status:Queued')->id]);
-			
+
 			//forech for each job queued and add them to an array of jobs and add 1 to count
-			foreach ($jobs as $job) 
+			foreach ($jobs as $job)
 			{
-				if ($count < threadCount) 
+				if ($count < threadCount)
 				{
 					$path = $job["timestamp"] . '/' . $job["name"];
 					array_push($toRunJobs, $path);
 					$count++;
-				} 
+				}
 				else
 				{
 					break;
 				}
 			}
 			return $toRunJobs;
-		} 
+		}
 		else
 		{
 			return null;

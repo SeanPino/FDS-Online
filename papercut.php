@@ -65,6 +65,8 @@ class pc
 
 	public static function getLineNumber($file, $searchString, $startpos, $endpos, $lineCount, $direction)
 	{
+		//echo json_encode(var_dump($file));
+		//die();
 		$line = - 1;
 		$newStartPos = $startpos;
 		$newEndPos = $endpos;

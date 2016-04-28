@@ -3,7 +3,7 @@ require ("vendor/slim/slim/Slim/Slim.php");
 require ("Database.php");
 \Slim\Slim::registerAutoloader();
 define('PATH', $_SERVER['SERVER_NAME']);
-
+date_default_timezone_set('UTC');
 $app = new \Slim\Slim();
 
 /**
@@ -231,6 +231,40 @@ $app->get('/api/v1/wipe/', function() use($app){
     echo "The jobs have been wiped.";
 });
 
+/**
+ * @api {get} /api/v1/kill/:id Kills a job
+ * @apiDescription Kills a currently running job
+ * @apiGroup kill
+ * @apiName KillJob
+ * @apiVersion 1.0.0
+ * @apiExample {curl} Example usage:
+ *      curl 'http://pyro.demo/api/v1/kill/1
+ */
+$app->get('/api/v1/kill/:id', function($id) use($app){
+    
+    $job = DB::GetJob($id);
+    if($job['id'] == 0){
+        echo 'The job does not exist';
+    }else{
+
+        // For now we just straight up kill fds.exe
+        // If we want to kill a specific job, we'll need to store what job is associated with what pid.
+        shell_exec('taskkill /f /im fds.exe');
+
+        // Get the file it's in and remove everything except the .out file
+        $directoryOfFile = 'uploads/' . $job['timestamp'] . '/*';
+        $files = glob($directoryOfFile);
+        var_dump($files);
+        foreach($files as $f){
+            if(substr($f, -4) !== ".out"){
+                unlink($f);
+            }
+        }
+
+        // Remove the job from the database.
+        DB::DeleteJob($id, $app);
+    }
+});
 // Run the code.
 $app->run();
 ?>

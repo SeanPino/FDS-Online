@@ -63,9 +63,9 @@ $(document).ready(function () {
 
 	if($('#list_page').length > 0) {
 		getList();
-		window.setInterval(function(){
+/*		window.setInterval(function(){
 			getList();
-		}, REFRESH_INT);
+		}, REFRESH_INT);*/
 	}
 
 	var files;
@@ -83,7 +83,7 @@ $(document).ready(function () {
 		data.append('file', files);
 
 		$.ajax({
-			url: '/api/v1/jobs',
+			url: 'api/v1/jobs',
 			type: 'POST',
 			data: data,
 			cache: false,
@@ -100,9 +100,8 @@ $(document).ready(function () {
 				// Hide loading spinner
 			},
 			error: function (object, status, error) {
-				console.log("ERROR");
-				console.log(status);
-				console.log(error);
+				console.log(object);
+				
 				// Hide loading spinner
 			}
 		})
