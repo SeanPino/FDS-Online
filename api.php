@@ -232,13 +232,15 @@ $app->get('/api/v1/wipe/', function() use($app){
 });
 
 /**
- * @api {get} /api/v1/kill/:id Kills a job
- * @apiDescription Kills a currently running job
+ * @api {get} /api/v1/kill/:id Kills a job.
+ * @apiDescription Kills a currently running job.
  * @apiGroup kill
  * @apiName KillJob
  * @apiVersion 1.0.0
  * @apiExample {curl} Example usage:
  *      curl 'http://pyro.demo/api/v1/kill/1
+ * @apiSuccess (200 OK) {String} A string indicating kill and delete were successful.
+ * @apiError (400 Bad Request) {String) A string indicating the job does not exist.
  */
 $app->get('/api/v1/kill/:id', function($id) use($app){
     
@@ -254,7 +256,6 @@ $app->get('/api/v1/kill/:id', function($id) use($app){
         // Get the file it's in and remove everything except the .out file
         $directoryOfFile = 'uploads/' . $job['timestamp'] . '/*';
         $files = glob($directoryOfFile);
-        var_dump($files);
         foreach($files as $f){
             if(substr($f, -4) !== ".out"){
                 unlink($f);
