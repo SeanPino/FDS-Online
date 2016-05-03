@@ -126,7 +126,6 @@ $app->delete('/api/v1/delete/:id', function ($id) use ($app)
 $app->get('/api/v1/download/:id', function($id)
 {
 	$job = DB::GetJob($id);
-
 	//print $id;
 	
 	// Get the job to be downloaded.
@@ -149,18 +148,39 @@ $app->get('/api/v1/download/:id', function($id)
 	//
 	//        // Now make it available for download.
 	//        return $zip;
-	chmod(".", 0777);
+	chmod('uploads/' . $job['timestamp'], 0777);
 	$zip = new ZipArchive();
-	$files = scandir(".");
-	$zip->open("zip.zip", ZipArchive::CREATE);
-	// var_dump($zip);
+	$files = scandir("uploads/" . $job['timestamp'] . '/');
+	//$zip->open('uploads/' . $job['timestamp'] . '/' . $job['timestamp'] . ".zip", ZipArchive::CREATE);
+        $zip->open('completed/' . $job['timestamp'] . '.zip', ZipArchive::CREATE);
 	foreach ($files as $f) 
 	{
-		$zip->addFile($f);
+            if(file_exists('uploads/' . $job['timestamp'] . '/' . $f)){
+                if(is_file('uploads/' . $job['timestamp'] . '/' . $f)){
+                    if(substr($f, -4) !== '.fds' && substr($f, -4) !== '.zip'){
+                        echo 'adding file ' . 'uploads/' . $job['timestamp'] . '/' . $f . '<br />';
+                        var_dump($zip->addFile('uploads/' . $job['timestamp'] . '/' . $f));
+                    }
+                }
+            }
 	}
-	$res = $zip->close();
-	return $zip;
-	// var_dump($res);
+        $res = $zip->close();
+        if($res){
+            echo 'Yes it work<br />';
+            var_dump($zip);
+            
+            // Send headers and force download
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename('completed/' . $job['timestamp'] . '.zip').'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize('completed/' . $job['timestamp'] . '.zip'));            
+            readfile('completed/' . $job['timestamp'] . '.zip');
+        }else{
+            echo 'didnt work';
+        }
 });
 
 /**
