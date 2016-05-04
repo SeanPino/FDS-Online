@@ -125,61 +125,42 @@ $app->delete('/api/v1/delete/:id', function ($id) use ($app)
  */
 $app->get('/api/v1/download/:id', function($id)
 {
-	$job = DB::GetJob($id);
-	//print $id;
-	
-	// Get the job to be downloaded.
-	//        $job = DB::FindJob($id, $app);
-	//        echo $id . "<br />";
-	//        $job["timestamp"] = 1446044514;
-	//        // Create the zip.
-	//        $zip = new ZipArchive();
-	//        echo "uploads/" . $job["timestamp"] . "/" . $job["timestamp"] . ".zip<br />";
-	//        // Add everything except the original FDS file to the list of stuff to zip.
-	//        $zip->open("uploads/" . $job["timestamp"] . "/" . $job["timestamp"] . ".zip", ZipArchive::CREATE);
-	//        $files = scandir(".");
-	//        foreach($files as $f){
-	//            echo $f;
-	//            if(substr($f, -4) !== ".fds"){  // Don't include the original FDS file.
-	//                $zip->addFile($f);
-	//            }
-	//        }
-	//        $zip->close();
-	//
-	//        // Now make it available for download.
-	//        return $zip;
-	chmod('uploads/' . $job['timestamp'], 0777);
-	$zip = new ZipArchive();
-	$files = scandir("uploads/" . $job['timestamp'] . '/');
-	//$zip->open('uploads/' . $job['timestamp'] . '/' . $job['timestamp'] . ".zip", ZipArchive::CREATE);
-        $zip->open('completed/' . $job['timestamp'] . '.zip', ZipArchive::CREATE);
-	foreach ($files as $f) 
-	{
-            if(file_exists('uploads/' . $job['timestamp'] . '/' . $f)){
-                if(is_file('uploads/' . $job['timestamp'] . '/' . $f)){
-                    if(substr($f, -4) !== '.fds' && substr($f, -4) !== '.zip'){
-                        echo 'adding file ' . 'uploads/' . $job['timestamp'] . '/' . $f . '<br />';
-                        var_dump($zip->addFile('uploads/' . $job['timestamp'] . '/' . $f));
+        $job = DB::GetJob($id);
+        chmod('uploads/' . $job['timestamp'], 0777);
+        $zip = new ZipArchive();
+        if($zip->open('completed/' . $job['timestamp'] . '.zip', ZipArchive::CREATE) === TRUE){
+            // Get the files we need to add.
+            $files = scandir('uploads/' . $job['timestamp']);
+            foreach($files as $f){
+                $fi = 'uploads/' . $job['timestamp'] . '/' . $f;
+                if(file_exists($fi)){
+                    if(is_file($fi)){
+                        if(substr($f, -4) !== '.fds'){
+                            //echo 'adding file ' . $f;
+                            $zip->addFile($fi, $f);
+                        }
                     }
                 }
             }
-	}
-        $res = $zip->close();
-        if($res){
-            echo 'Yes it work<br />';
-            var_dump($zip);
             
-            // Send headers and force download
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="'.basename('completed/' . $job['timestamp'] . '.zip').'"');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize('completed/' . $job['timestamp'] . '.zip'));            
-            readfile('completed/' . $job['timestamp'] . '.zip');
+            if($zip->close()){
+                // Force download
+                $fi = 'completed/' . $job['timestamp'] . '.zip';
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename=' . $job['timestamp'] . '.zip'); 
+                header('Content-Transfer-Encoding: binary');
+                header('Connection: Keep-Alive');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($fi));            
+                readfile($fi);
+            }else{
+                echo 'Unable to complete creating the Zip file.';
+            }
         }else{
-            echo 'didnt work';
+            echo 'Could not open zip archive.';
         }
 });
 
